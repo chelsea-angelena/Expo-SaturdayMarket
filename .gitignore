@@ -30,6 +30,7 @@ config/firebaseConfig.js
 firebaseConfig.js
 firebaseConfig
 firebase
+firebaseConfigFile.js
 config/firebaseConfig
 config/firebaseConfig.js
 config/firebseConfig.js
