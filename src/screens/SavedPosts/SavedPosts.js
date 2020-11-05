@@ -57,19 +57,21 @@ export default function SavedPosts() {
 	if (!user) {
 		return <Text>Loading...</Text>;
 	}
+	console.log(postData);
 	return (
 		// <Screen>
 		<FlatList
 			data={postData}
-			keyExtractor={postData.postId}
+			keyExtractor={(postData) => postData.id}
 			renderItem={({ item }) => {
 				return (
 					<SavedPostItem
 						item={item}
+						navigation={navigation}
+						postId={item.id}
 						title={item.post.title}
 						description={item.post.description}
 						price={item.post.price}
-						created={item.created}
 						category={item.post.category}
 						image={item.post.image}
 						postedBy={item.userData.displayName}
@@ -78,7 +80,7 @@ export default function SavedPosts() {
 						phoneNumber={item.userData.phoneNumber}
 						userPhoto={item.userData.photoURL}
 						authorID={item.authorID}
-						savedPostId={item.id}
+						//
 					/>
 				);
 			}}

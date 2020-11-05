@@ -49,7 +49,8 @@ const PostListItem = ({
 	};
 
 	return (
-		<Card containerStyle={styles.container} wrapperStyle={styles.wrapper}>
+		<View  style={styles.wrapper} >
+		<Card style={styles.container}>
 			<Image
 				PlaceholderContent={<ActivityIndicator />}
 				resizeMode='cover'
@@ -99,6 +100,7 @@ const PostListItem = ({
 				/>
 			</View>
 		</Card>
+		</View>
 	);
 };
 

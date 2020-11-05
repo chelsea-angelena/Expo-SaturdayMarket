@@ -94,7 +94,8 @@ export default function PostsListScreen(props) {
 
 const styles = StyleSheet.create({
 	container: {
-		// flex: 1,
+		flex: 1,
+		backgroundColor: 'red',
 		width: '100%',
 		// alignItems: 'center',
 		alignSelf: 'center',

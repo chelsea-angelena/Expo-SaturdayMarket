@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AuthContext } from '../Context/AuthContext';
-
+import SavedPostItem from '../screens/SavedPosts/SavedPostItem';
 import {
 	PostsListScreen,
 	PostListItem,
@@ -30,6 +30,11 @@ const PostsStack = ({ navigation }) => {
 				name='ListItemDetails'
 				component={ListItemDetails}
 				options={{ title: 'Posts' }}
+			/>
+			<Stack.Screen
+				name='SavedPostItem'
+				component={SavedPostItem}
+				options={{ title: 'Saved Post' }}
 			/>
 			<Stack.Screen
 				name='UserProfileScreen'

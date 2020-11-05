@@ -16,14 +16,12 @@ import { AuthContext } from '../../Context/AuthContext';
 
 const ListItemDetails = ({ navigation, route }, props) => {
 	const { item } = route.params;
-	console.log(item.id, 'item.id');
 	const [isSaved, setIsSaved] = useState(false);
 	const [savedList, setSavedList] = useState([]);
 	const [error, setError] = useState(null);
 
 	const user = useContext(AuthContext);
 	const userId = user.uid;
-	console.log(userId);
 
 	let { created, post, userData, authorID, id } = item;
 	let { location, title, category, description, image, price } = post;

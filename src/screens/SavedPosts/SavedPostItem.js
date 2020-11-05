@@ -23,7 +23,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 const SavedPostItem = ({
 	item,
 	title,
-	created,
+	// created,
 	description,
 	price,
 	savedPostId,
@@ -32,32 +32,30 @@ const SavedPostItem = ({
 	postedBy,
 	altEmail,
 	email,
+	postId,
 	phoneNumber,
-	authorID,
+	// authorID,
 	userPhoto,
+	navigation,
 }) => {
-	const navigation = useNavigation();
-	let Date = created.toDate();
-	let dateArr = Date.toString().split(' ');
-	let splicedDate = dateArr.splice(0, 4);
-	let splicedTime = dateArr.splice(0, 1);
-	let oneMore = splicedTime[0].split('');
-	let another = oneMore.splice(0, 5);
-	let time = another.join('');
-	const { post, userData } = item;
-	const isSaved = 'isSaved';
+	// let Date = created.toDate();
+	// let dateArr = Date.toString().split(' ');
+	// let splicedDate = dateArr.splice(0, 4);
+	// let splicedTime = dateArr.splice(0, 1);
+	// let oneMore = splicedTime[0].split('');
+	// let another = oneMore.splice(0, 5);
+	// let time = another.join('');
 
+	const { authorID, post, userData } = item;
+	console.log(item.id, 'savedITem');
 	const goToDetails = () => {
-		navigation.navigate('PostsStack', {
-			screen: 'ListItemDetails',
-			params: item,
-		});
+		navigation.navigate('ListItemDetails', { item });
 	};
 	const user = useContext(AuthContext);
 	const userId = user.uid;
 	console.log(userId, 'userId');
-	const postId = item.postedId;
-
+	// const postId = item.postedId;
+	console.log(postId, 'postId');
 	return (
 		<Card style={styles.container}>
 			<View style={styles.wrapper}>
