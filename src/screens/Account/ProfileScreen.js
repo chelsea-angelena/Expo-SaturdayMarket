@@ -20,70 +20,67 @@ import {
 	Avatar,
 	Accessory,
 } from 'react-native-elements';
+import EditProfile from './EditProfile';
+import { AuthContext } from '../../Context/AuthContext.js';
 import colors from '../../styles/colors';
 import { useNavigation } from '@react-navigation/native';
 import MyPostsList from './MyPostsList';
 import useSWR from 'swr';
 import Screen from '../../Atoms/Screen';
 
-export default function ProfileScreen({ user, signOut, route }) {
+export default function ProfileScreen({
+	signOut,
+	showEdit,
+	route,
+	onUpdate,
+	displayName,
+	photoURL,
+	email,
+	userId,
+	setShowEdit,
+}) {
 	const [myPosts, setMyPosts] = useState([]);
 	const [visible, setVisible] = useState(false);
 	const [error, setError] = useState(null);
-	// const user = useContext(UserContext);
-	let userId = user.uid;
-
-	console.log(user);
+	const [isEditable, setIsEditable] = useState(false);
 	const toggleOverlay = () => {
 		setVisible(!visible);
 	};
 	const navigation = useNavigation();
 
-	const getMyPosts = async () => {
-		try {
-			let result = await db.getUserPosts(userId);
-			setMyPosts(result);
-		} catch (e) {
-			setError(e);
-		}
-	};
+	// const getMyPosts = async () => {
+	// 	try {
+	// 		let result = await db.getUserPosts(userId);
+	// 		if (result.length >= 1) {
+	// 			setMyPosts(result);
+	// 		} else {
+	// 			null;
+	// 		}
+	// 	} catch (e) {
+	// 		setError(e);
+	// 	}
+	// };
 	const logOut = async () => {
 		db.signOut();
 		navigation.navigate('SignInScreen');
 	};
 
-	useEffect(() => {
-		getMyPosts();
-	}, []);
+	// useEffect(() => {
+	// 	getMyPosts();
+	// }, []);edi
 
-	if (!userId) {
-		return <Text>Loading....</Text>;
-	}
-	if (!user) {
-		return <Text>Loading....</Text>;
-	}
+	// if (!userId) {
+	// 	return <Text>Loading....</Text>;
+	// }
 
 	return (
 		<ScrollView>
 			<Card containerStyle={styles.container} wrapperStyle={styles.wrapper}>
-				{user.photoURL ? (
-					<Avatar rounded size='xlarge' source={{ uri: user.photoURL }}>
-						<Accessory
-							size={24}
-							onPress={() => navigation.navigate('EditProfile')}
-						/>
+				{photoURL ? (
+					<Avatar rounded size='xlarge' source={{ uri: photoURL }}>
+						<Accessory size={24} onPress={() => setShowEdit(true)} />
 					</Avatar>
-				) : null}
-
-				{user.image ? (
-					<Avatar rounded size='xlarge' source={{ uri: image }}>
-						<Accessory
-							size={24}
-							onPress={() => navigation.navigate('EditProfile')}
-						/>
-					</Avatar>
-				) : null}
-				{!user.photoURL && !user.image ? (
+				) : (
 					<Avatar
 						rounded
 						size='x-large'
@@ -96,40 +93,37 @@ export default function ProfileScreen({ user, signOut, route }) {
 							onPress={() => navigation.navigate('EditProfile')}
 						/>
 					</Avatar>
-				) : null}
+				)}
+
+				{showEdit ? <EditProfile onUpdate={onUpdate} /> : null}
+
 				<Card.Title style={{ marginTop: 24 }}>Hello!</Card.Title>
-				<Card.Title style={{ marginTop: 24 }}>{user.displayName}</Card.Title>
-				<ListItem.Subtitle style={{ padding: 8 }}>
-					{user.email}
-				</ListItem.Subtitle>
-				<ListItem.Subtitle style={{ padding: 8 }}>
-					{user.phoneNumber}
-				</ListItem.Subtitle>
+				<Card.Title style={{ marginTop: 24 }}>{displayName}</Card.Title>
+				<ListItem.Subtitle style={{ padding: 8 }}>{email}</ListItem.Subtitle>
 				<Divider />
 				<View>
-					<View>
-						<Divider
-							style={{
-								margin: 24,
-								width: 300,
-								padding: 0.5,
-								backgroundColor: colors.drab,
-							}}
-						/>
-						<ListItem.Subtitle style={{ alignSelf: 'center', padding: 8 }}>
-							Click to View and Edit Posts
-						</ListItem.Subtitle>
+					<Divider
+						style={{
+							margin: 24,
+							width: 300,
+							padding: 0.5,
+							backgroundColor: colors.drab,
+						}}
+					/>
+					<ListItem.Subtitle style={{ alignSelf: 'center', padding: 8 }}>
+						Click to View and Edit Posts
+					</ListItem.Subtitle>
 
-						<Icon
-							type='material-community'
-							color='black'
-							size={32}
-							name='chevron-down'
-							onPress={toggleOverlay}
-						/>
-					</View>
-					{/* <View style={{ height: 300 }}> */}
-					<Overlay
+					<Icon
+						type='material-community'
+						color='black'
+						size={32}
+						name='chevron-down'
+						onPress={toggleOverlay}
+					/>
+				</View>
+				{/* <View style={{ height: 300 }}> */}
+				{/* <Overlay
 						fullScreen={false}
 						animationType='slide'
 						isVisible={visible}
@@ -138,7 +132,7 @@ export default function ProfileScreen({ user, signOut, route }) {
 					>
 						<MyPostsList myPosts={myPosts} />
 					</Overlay>
-				</View>
+				</View> */}
 
 				<View style={styles.buttonView}>
 					<Button

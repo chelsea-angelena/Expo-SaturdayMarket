@@ -12,7 +12,7 @@ import AppText from '../../Atoms/Text';
 import { CheckBox, Overlay, Icon, Card, Divider } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { UserContext } from '../../../App';
+import { AuthContext } from '../../Context/AuthContext';
 // import Modal from 'modal-react-native-web';
 import FormImagePicker from '../../Atoms/FormImagePicker';
 import * as db from '../../config/firebaseConfig';
@@ -20,7 +20,7 @@ import useLocation from '../../hooks/useLocation';
 // import CategoryModal from './Categories';
 import colors from '../../styles/colors';
 import Logo from '../../Atoms/Logo';
-import UserMap from './UserMap';
+// import UserMap from './UserMap';
 import { useNavigation } from '@react-navigation/native';
 // import Screen from '../../Atoms/Screen';
 
@@ -63,7 +63,7 @@ export default function PostForm() {
 	// 	console.log(location, 'location');
 	// };
 
-	const user = useContext(UserContext);
+	const user = useContext(AuthContext);
 	let userId = user.uid;
 
 	const submitPostForm = async (values) => {
@@ -206,7 +206,7 @@ export default function PostForm() {
 									onPress={() => setChecked(!checked)}
 									containerStyle={styles.box}
 								/>
-								{checked ? <UserMap location={location} /> : null}
+								{/* {checked ? <UserMap location={location} /> : null} */}
 								<View style={styles.buttonContainer}>
 									<PostFormButton
 										buttonType='outline'
