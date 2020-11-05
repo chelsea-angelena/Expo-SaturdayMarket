@@ -1,19 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
-import * as db from '../config/firebaseConfig.js';
+import * as db from '../config/firebaseConfig';
+import { auth } from '../config/firebaseConfig';
 
-export default () => {
-	const [user, setUser] = useState();
+export const useAuth = () => {
+	const [user, setUser] = useState(() => {
+		auth.currentUser;
+	});
+	const [loading, setLoading] = useState(true);
 
-	const [error, setError] = useState(true);
-
-	const onAuthStateChanged = (user) => {
-		setUser({ user });
-	};
+	function onChange(user) {
+		setUser(user);
+		setLoading(false);
+	}
 
 	useEffect(() => {
-		db.checkUserAuth(onAuthStateChanged);
+		const unsubscribe = auth.onAuthStateChanged(onChange);
+
+		return () => unsubscribe();
 	}, []);
 
-	return [user];
+	return [user, loading];
 };

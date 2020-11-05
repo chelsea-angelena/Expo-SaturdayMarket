@@ -5,6 +5,7 @@ import {
 	Image,
 	TouchableWithoutFeedback,
 	Alert,
+	TouchableOpacity,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -42,7 +43,7 @@ function ImageInput({ imageUri, onChangeImage }) {
 	};
 
 	return (
-		<TouchableWithoutFeedback onPress={handlePress}>
+		<TouchableOpacity onPress={handlePress}>
 			<View style={styles.container}>
 				{!imageUri && (
 					<MaterialCommunityIcons
@@ -54,7 +55,7 @@ function ImageInput({ imageUri, onChangeImage }) {
 				)}
 				{imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
 			</View>
-		</TouchableWithoutFeedback>
+		</TouchableOpacity>
 	);
 }
 
@@ -69,7 +70,6 @@ const styles = StyleSheet.create({
 		width: 116,
 		height: 116,
 		margin: 24,
-
 	},
 	image: {
 		height: '100%',

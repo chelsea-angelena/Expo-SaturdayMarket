@@ -17,6 +17,7 @@ import { AuthContext } from '../../Context/AuthContext';
 import FormImagePicker from '../../Atoms/FormImagePicker';
 import * as db from '../../config/firebaseConfig';
 import useLocation from '../../hooks/useLocation';
+
 // import CategoryModal from './Categories';
 import colors from '../../styles/colors';
 import Logo from '../../Atoms/Logo';
@@ -24,19 +25,19 @@ import Logo from '../../Atoms/Logo';
 import { useNavigation } from '@react-navigation/native';
 // import Screen from '../../Atoms/Screen';
 
-const validationSchema = Yup.object().shape({
-	title: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Required'),
-	description: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Required'),
-	price: Yup.number().required('Required'),
-	images: Yup.array().min(1).required('Required'),
-	categories: Yup.object().required,
-});
+// const validationSchema = Yup.object().shape({
+// 	title: Yup.string()
+// 		.min(2, 'Too Short!')
+// 		.max(50, 'Too Long!')
+// 		.required('Required'),
+// 	description: Yup.string()
+// 		.min(2, 'Too Short!')
+// 		.max(50, 'Too Long!')
+// 		.required('Required'),
+// 	price: Yup.number().required('Required'),
+// 	images: Yup.array().min(1).required('Required'),
+// 	categories: Yup.object().required,
+// });
 
 export default function PostForm() {
 	// const [visible, setVisible] = useState(false);
@@ -46,8 +47,6 @@ export default function PostForm() {
 	const [location] = useLocation();
 	const navigation = useNavigation();
 	const [error, setError] = useState(null);
-
-	const { latitude, longitude } = location;
 
 	const toggleOverlay = () => {
 		setVisible(!visible);
@@ -66,21 +65,36 @@ export default function PostForm() {
 	const user = useContext(AuthContext);
 	let userId = user.uid;
 
-	const submitPostForm = async (values) => {
-		const { images, title, description, phoneNumber, altEmail } = values;
+	const submitPostForm = (values) => {
 		const { displayName, email, photoURL } = user;
 		try {
-			const response = await db.createPost(values, user, location, userId);
+			let response = db.createPost(
+				values,
+				displayName,
+				photoURL,
+				email,
+				location,
+				userId
+			);
+			console.log(response);
 		} catch (error) {
 			setError(error);
-		} finally {
-			setIsSubmitting(false);
-			navigation.navigate('TabNavigator', 'PostsStack', {
-				screen: 'PostsListScreen',
-			});
+			// } finally {
+			// setIsSubmitting(false);
+			// navigation.navigate('PostsStack', {
+			// 	screen: 'PostsListScreen',
+			// });
 		}
 	};
-
+	const handleRemove = (uri) => {
+    setFieldValue(
+      name,
+      imageUris.filter((imageUri) => imageUri !== uri)
+    );
+  };
+	if (!user) {
+		return <Text>Loading..</Text>;
+	}
 	return (
 		<>
 			<Formik
@@ -200,12 +214,12 @@ export default function PostForm() {
 											updateCategory={setCategory}
 										/>
 									</Overlay> */}
-								<CheckBox
+								{/* <CheckBox
 									title='Include a Map with your location?'
 									status={checked ? 'checked' : 'unchecked'}
 									onPress={() => setChecked(!checked)}
 									containerStyle={styles.box}
-								/>
+								/> */}
 								{/* {checked ? <UserMap location={location} /> : null} */}
 								<View style={styles.buttonContainer}>
 									<PostFormButton
@@ -213,12 +227,12 @@ export default function PostForm() {
 										onPress={handleSubmit}
 										title='Submit Post'
 										buttonColor={colors.slate}
-										disabled={!isValid || isSubmitting}
-										loading={isSubmitting}
-										disabledStyle={{
-											backgroundColor: colors.primaryBlue,
-											color: 'red',
-										}}
+										// disabled={!isValid || isSubmitting}
+										// loading={isSubmitting}
+										// disabledStyle={{
+										// 	backgroundColor: colors.primaryBlue,
+										// 	color: 'red',
+										// }}
 									/>
 									<ErrorMessage errorValue={errors.general} />
 								</View>

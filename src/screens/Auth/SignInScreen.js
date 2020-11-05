@@ -38,7 +38,6 @@ const validationSchema = Yup.object().shape({
 });
 
 const SignInScreen = () => {
-	const user = useContext(AuthContext);
 	const [error, setError] = useState(null);
 	const navigation = useNavigation();
 	const goToSignup = () => navigation.navigate('SignUpScreen');
@@ -83,7 +82,6 @@ const SignInScreen = () => {
 							isValid,
 							touched,
 							handleBlur,
-							isSubmitting,
 						}) => (
 							<>
 								<FormInput
@@ -94,11 +92,14 @@ const SignInScreen = () => {
 									autoCapitalize='none'
 									iconName='ios-mail'
 									iconColor='#2C384A'
+									style={{ color: colors.white }}
 									onBlur={handleBlur('email')}
 								/>
 								<ErrorMessage errorValue={touched.email && errors.email} />
+								<ErrorMessage errorValue={touched.email && errors.email} />
 								<FormInput
 									name='password'
+									style={{ color: colors.white }}
 									value={values.password}
 									onChangeText={handleChange('password')}
 									placeholder='Enter password'
@@ -116,7 +117,7 @@ const SignInScreen = () => {
 										onPress={handleSubmit}
 										title='LOGIN'
 										buttonColor={colors.ochre}
-										disabled={!isValid || isSubmitting}
+										disabled={!isValid}
 									/>
 								</View>
 								<ErrorMessage errorValue={errors.general} />

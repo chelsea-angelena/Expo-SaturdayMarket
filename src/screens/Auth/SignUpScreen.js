@@ -31,7 +31,6 @@ const validationSchema = Yup.object().shape({
 		.required('Confirm Password is required'),
 });
 const SignUpScreen = () => {
-	const user = useContext(AuthContext);
 	const [error, setError] = useState(null);
 	const navigation = useNavigation();
 

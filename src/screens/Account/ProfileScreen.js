@@ -42,7 +42,7 @@ export default function ProfileScreen({
 	const [myPosts, setMyPosts] = useState([]);
 	const [visible, setVisible] = useState(false);
 	const [error, setError] = useState(null);
-	const [isEditable, setIsEditable] = useState(false);
+
 	const toggleOverlay = () => {
 		setVisible(!visible);
 	};
@@ -61,8 +61,8 @@ export default function ProfileScreen({
 	// 	}
 	// };
 	const logOut = async () => {
-		db.signOut();
-		navigation.navigate('SignInScreen');
+		await db.signOut();
+		navigation.navigate('TabNavigator', { screen: 'AuthStack' });
 	};
 
 	// useEffect(() => {
@@ -88,10 +88,7 @@ export default function ProfileScreen({
 						containerStyle={{ backgroundColor: colors.drab }}
 						overlayContainerStyle={{ backgroundColor: colors.medGrey }}
 					>
-						<Accessory
-							size={24}
-							onPress={() => navigation.navigate('EditProfile')}
-						/>
+						<Accessory size={24} onPress={() => setShowEdit(true)} />
 					</Avatar>
 				)}
 
@@ -122,17 +119,17 @@ export default function ProfileScreen({
 						onPress={toggleOverlay}
 					/>
 				</View>
-				{/* <View style={{ height: 300 }}> */}
-				{/* <Overlay
+				<View style={{ height: 300 }}>
+					{/* <Overlay
 						fullScreen={false}
 						animationType='slide'
 						isVisible={visible}
 						transparent={true}
 						onBackdropPress={toggleOverlay}
-					>
-						<MyPostsList myPosts={myPosts} />
-					</Overlay>
-				</View> */}
+					> */}
+					<MyPostsList myPosts={myPosts} />
+					{/* </Overlay> */}
+				</View>
 
 				<View style={styles.buttonView}>
 					<Button

@@ -7,27 +7,31 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 } from 'react-native';
+import { Button } from 'react-native-elements';
 import { Icon, Card, ListItem, Divider, Avatar } from 'react-native-elements';
 import colors from '../../styles/colors';
 // import UserMap from '../Posts/UserMap';
 import * as db from '../../config/firebaseConfig';
-import { UserContext } from '../../../App';
+import { AuthContext } from '../../Context/AuthContext';
 
 const ListItemDetails = ({ navigation, route }, props) => {
 	const { item } = route.params;
+	console.log(item.id, 'item.id');
+	const [isSaved, setIsSaved] = useState(false);
+	const [savedList, setSavedList] = useState([]);
+	const [error, setError] = useState(null);
 
-	const user = useContext(UserContext);
+	const user = useContext(AuthContext);
 	const userId = user.uid;
-	const [isDisabled, setIsDisabled] = useState(false);
+	console.log(userId);
 
-	let { created, post, userData, authorID } = item;
-
+	let { created, post, userData, authorID, id } = item;
 	let { location, title, category, description, image, price } = post;
 
 	let { altEmail, email, displayName, phoneNumber, photoURL } = userData;
 
 	let profileID = authorID;
-	let postId = item.id;
+	let postId = id;
 
 	let listItemDate = created;
 
@@ -39,16 +43,68 @@ const ListItemDetails = ({ navigation, route }, props) => {
 	let timeSplice = split.splice(0, 5);
 	let time = timeSplice.join('');
 
+	const removeSave = async () => {
+		await db.deleteSavedPost(postId, userId);
+		setIsSaved(false);
+	};
+
+	const getSaved = async () => {
+		try {
+			let saved = await db
+				.getSavedPosts(userId)
+				((saved) => saved.filter((post) => post === post));
+			setSavedList(saved);
+			if (saved.length >= 1) {
+				setIsSaved(true);
+			}
+		} catch (e) {
+			setError(e);
+		}
+	};
+
+	useEffect(() => {
+		getSaved();
+	}, []);
+
+	// const onIconPress = async () => {
+	// 	if (isSaved) {
+	// 		try {
+	// 			await db.deleteSavedPost(postId, userId);
+	// 			setIsSaved(false);
+	// 		} catch (e) {
+	// 			setError(e);
+	// 		}
+	// 	}
+	// 	if (!isSaved) {
+	// 		try {
+	// 			await db.savePost(postId, userId);
+	// 			setIsSaved(true);
+	// 		} catch (e) {
+	// 			setError(e);
+	// 		}
+	// 	}
+	// };
+	// const savePost = async () => {
+	// 	console.log(postId);
+	// 	try {
+	// 		let result = await db.savePost(postId, userId);
+	// 		console.log(result);
+	// 		setIsSaved(true);
+	// 	} catch (e) {
+	// 		setError(e);
+	// 	}
+	// };
 	// const checkIfSaved = async () => {
 	// 	try {
 	// 		let response = await db.checkIfSaved(postId, userId);
+	// 		setIsSaved(true);
 	// 	} catch (e) {
 	// 		console.log(e);
 	// 	}
 	// };
 	const savePost = async () => {
 		let result = await db.savePost(postId, userId);
-		setIsDisabled(true);
+		setIsSaved(true);
 	};
 
 	// useEffect(() => {
@@ -93,17 +149,37 @@ const ListItemDetails = ({ navigation, route }, props) => {
 					<Text style={styles.contentText}>{description}</Text>
 
 					<Text style={styles.contentText}>{category}</Text>
-					<Icon
-						disabled={isDisabled}
-						disabledStyle={{ color: colors.red }}
+					<Button
 						onPress={savePost}
-						type='material-community'
-						raised
-						containerStyle={{ backgroundColor: 'pink' }}
-						name='heart'
-						color={colors.medGrey}
-						underlayColor={colors.darkGrey}
+						title={isSaved ? 'Un-Save' : 'Save'}
+						style={
+							isSaved ? { backgroundColor: 'red' } : { backgroundColor: 'blue' }
+						}
 					/>
+
+					{/* {isSaved ? (
+						<Icon
+							onPress={removeSave}
+							type='material-community'
+							raised
+
+							name='heart'
+							color={colors.red}
+							underlayColor={colors.darkGrey}
+						/>
+					) : (
+						<Icon
+							disabled
+							disabledStyle={{ color: colors.red }}
+							onPress={savePost}
+							type='material-community'
+							raised
+
+							name='heart'
+							color={colors.medGrey}
+							underlayColor={colors.darkGrey}
+						/>
+					)} */}
 					<ListItem.Subtitle style={styles.date}>Posted on:</ListItem.Subtitle>
 					<ListItem.Subtitle style={styles.date}>
 						{splicedDate[0]} {splicedDate[1]} {splicedDate[2]} {splicedDate[3]}
@@ -150,7 +226,7 @@ const ListItemDetails = ({ navigation, route }, props) => {
 							</TouchableOpacity>
 						</Card>
 					</View>
-					<UserMap location={location} />
+					{/* {userMap ? <UserMap location={location} /> : null} */}
 				</Card>
 			</View>
 		</ScrollView>
@@ -216,5 +292,11 @@ const styles = StyleSheet.create({
 	},
 	date: {
 		paddingTop: 8,
+	},
+	appButton: {
+		backgroundColor: 'blue',
+	},
+	appButtonDisabled: {
+		backgroundColor: 'red',
 	},
 });

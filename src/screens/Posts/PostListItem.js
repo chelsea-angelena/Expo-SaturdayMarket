@@ -35,13 +35,13 @@ const PostListItem = ({
 		photoURL,
 	} = userData;
 
-	let date = created.toDate();
-	let dateArr = date.toString().split(' ');
-	let splicedDate = dateArr.splice(0, 4);
-	let splicedTime = dateArr.splice(0, 1);
-	let split = splicedTime[0].split('');
-	let timeSplice = split.splice(0, 5);
-	let time = timeSplice.join('');
+	// let date = created.t.toDate();
+	// let dateArr = date.toString().split(' ');
+	// let splicedDate = dateArr.splice(0, 4);
+	// let splicedTime = dateArr.splice(0, 1);
+	// let split = splicedTime[0].split('');
+	// let timeSplice = split.splice(0, 5);
+	// let time = timeSplice.join('');
 	const navigation = useNavigation();
 
 	const goToDetails = () => {
@@ -83,12 +83,12 @@ const PostListItem = ({
 						{displayName}
 					</ListItem.Title>
 					<ListItem.Subtitle style={styles.date}>Posted on:</ListItem.Subtitle>
-					<ListItem.Subtitle style={styles.date}>
+					{/* <ListItem.Subtitle style={styles.date}>
 						{splicedDate[0]} {splicedDate[1]} {splicedDate[2]} {splicedDate[3]}
-					</ListItem.Subtitle>
-					<ListItem.Subtitle style={styles.date}>
+					</ListItem.Subtitle> */}
+					{/* <ListItem.Subtitle style={styles.date}>
 						at {time} PST
-					</ListItem.Subtitle>
+					</ListItem.Subtitle> */}
 				</View>
 				<Icon
 					type='material-community'

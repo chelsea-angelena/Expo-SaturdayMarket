@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { AuthContext } from '../Context/AuthContext';
 
 import {
 	PostsListScreen,
@@ -7,12 +8,11 @@ import {
 	ListItemDetails,
 	UserProfileScreen,
 } from '../screens/Posts';
-import { UserContext } from '../../App';
 
 const Stack = createStackNavigator();
 
 const PostsStack = ({ navigation }) => {
-	const user = useContext(UserContext);
+	const user = useContext(AuthContext);
 	console.log(user);
 	return (
 		<Stack.Navigator>

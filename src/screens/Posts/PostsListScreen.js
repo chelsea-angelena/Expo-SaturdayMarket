@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { UserContext } from '../../../App';
+import { AuthContext } from '../../Context/AuthContext';
 import { ScrollView, StyleSheet, FlatList, View, Text } from 'react-native';
 import * as db from '../../config/firebaseConfig';
 
@@ -9,7 +9,7 @@ import Screen from '../../Atoms/Screen';
 export default function PostsListScreen(props) {
 	const [posts, setPosts] = useState([]);
 
-	const user = useContext(UserContext);
+	const user = useContext(AuthContext);
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(true);
 	// const { data: posts, error } = useSWR('posts', db.getCollection);
@@ -84,7 +84,6 @@ export default function PostsListScreen(props) {
 							phoneNumber={item.userData.phoneNumber}
 							userPhoto={item.userData.photoURL}
 							authorID={item.authorID}
-
 						/>
 					);
 				}}
