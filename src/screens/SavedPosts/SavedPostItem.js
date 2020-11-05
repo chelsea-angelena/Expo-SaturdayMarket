@@ -44,11 +44,14 @@ const SavedPostItem = ({
 	let oneMore = splicedTime[0].split('');
 	let another = oneMore.splice(0, 5);
 	let time = another.join('');
-
+	const { post, userData } = item;
 	const isSaved = 'isSaved';
 
 	const goToDetails = () => {
-		navigation.navigate('ListItemDetails', { item });
+		navigation.navigate('PostsStack', {
+			screen: 'ListItemDetails',
+			params: item,
+		});
 	};
 	const user = useContext(AuthContext);
 	const userId = user.uid;

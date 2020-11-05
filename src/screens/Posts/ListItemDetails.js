@@ -47,12 +47,18 @@ const ListItemDetails = ({ navigation, route }, props) => {
 		await db.deleteSavedPost(postId, userId);
 		setIsSaved(false);
 	};
-
+	const savePost = async () => {
+		let result = await db.savePost(postId, userId);
+		setIsSaved(true);
+	};
+	const toggleSaved = () => {
+		!isSaved ? savePost() : removeSave();
+	};
 	const getSaved = async () => {
 		try {
-			let saved = await db
-				.getSavedPosts(userId)
-				((saved) => saved.filter((post) => post === post));
+			let saved = await db.getSavedPosts(userId)((saved) =>
+				saved.filter((post) => post === post)
+			);
 			setSavedList(saved);
 			if (saved.length >= 1) {
 				setIsSaved(true);
@@ -102,16 +108,15 @@ const ListItemDetails = ({ navigation, route }, props) => {
 	// 		console.log(e);
 	// 	}
 	// };
-	const savePost = async () => {
-		let result = await db.savePost(postId, userId);
-		setIsSaved(true);
-	};
 
 	// useEffect(() => {
 	// 	checkIfSaved();
 	// }, []);
 
 	if (!userId) {
+		return <Text>Loading...</Text>;
+	}
+	if (!postId) {
 		return <Text>Loading...</Text>;
 	}
 	return (
@@ -150,7 +155,7 @@ const ListItemDetails = ({ navigation, route }, props) => {
 
 					<Text style={styles.contentText}>{category}</Text>
 					<Button
-						onPress={savePost}
+						onPress={toggleSaved}
 						title={isSaved ? 'Un-Save' : 'Save'}
 						style={
 							isSaved ? { backgroundColor: 'red' } : { backgroundColor: 'blue' }

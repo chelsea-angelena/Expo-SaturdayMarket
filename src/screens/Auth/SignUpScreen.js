@@ -86,14 +86,14 @@ const SignUpScreen = () => {
 						<>
 							<View style={styles.innerView}>
 								<FormInput
-									displayName='displayName'
-									value={values.displayName}
-									onChangeText={handleChange('displayName')}
-									placeholder='Enter your full name'
-									iconName='md-person'
-									iconColor='#2C384A'
-									style={{ color: colors.white }}
-									onBlur={handleBlur('displayName')}
+						displayName='displayName'
+										value={values.displayName}
+										onChangeText={handleChange('displayName')}
+										placeholder='Enter your full name'
+										iconName='md-person'
+										iconColor='#2C384A'
+										style={{ color: colors.white }}
+										onBlur={handleBlur('displayName')}
 								/>
 								<ErrorMessage errorValue={touched.name && errors.name} />
 								<FormInput
