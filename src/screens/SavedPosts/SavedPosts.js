@@ -13,6 +13,7 @@ import * as db from '../../config/firebaseConfig';
 import { AuthContext } from '../../Context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import SavedPostItem from './SavedPostItem';
+import colors from '../../styles/colors';
 // import Screen from '../../Atoms/Screen';
 
 export default function SavedPosts() {
@@ -59,32 +60,42 @@ export default function SavedPosts() {
 	}
 	console.log(postData);
 	return (
-		// <Screen>
-		<FlatList
-			data={postData}
-			keyExtractor={(postData) => postData.id}
-			renderItem={({ item }) => {
-				return (
-					<SavedPostItem
-						item={item}
-						navigation={navigation}
-						postId={item.id}
-						title={item.post.title}
-						description={item.post.description}
-						price={item.post.price}
-						category={item.post.category}
-						image={item.post.image}
-						postedBy={item.userData.displayName}
-						altEmail={item.userData.altEmail}
-						email={item.userData.email}
-						phoneNumber={item.userData.phoneNumber}
-						userPhoto={item.userData.photoURL}
-						authorID={item.authorID}
-						//
-					/>
-				);
-			}}
-		/>
-		// </Screen>
+		<View style={styles.container}>
+			<FlatList
+				data={postData}
+				keyExtractor={(postData) => postData.id}
+				renderItem={({ item }) => {
+					return (
+						<SavedPostItem
+							item={item}
+							navigation={navigation}
+							postId={item.id}
+							title={item.post.title}
+							description={item.post.description}
+							price={item.post.price}
+							category={item.post.category}
+							image={item.post.image}
+							postedBy={item.userData.displayName}
+							altEmail={item.userData.altEmail}
+							email={item.userData.email}
+							phoneNumber={item.userData.phoneNumber}
+							userPhoto={item.userData.photoURL}
+							authorID={item.authorID}
+							//
+						/>
+					);
+				}}
+			/>
+		</View>
 	);
 }
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: colors.steel,
+		width: '100%',
+		maxWidth: 500,
+		// alignItems: 'center',
+		alignSelf: 'center',
+	},
+});

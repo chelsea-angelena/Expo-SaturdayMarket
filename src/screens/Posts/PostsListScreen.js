@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../Context/AuthContext';
 import { ScrollView, StyleSheet, FlatList, View, Text } from 'react-native';
 import * as db from '../../config/firebaseConfig';
-
+import colors from '../../styles/colors';
 import PostListItem from './PostListItem';
 import Screen from '../../Atoms/Screen';
 
@@ -63,6 +63,7 @@ export default function PostsListScreen(props) {
 	if (posts.length === 0) {
 		return <Text>No Lists....</Text>;
 	}
+
 	return (
 		<View style={styles.container}>
 			<FlatList
@@ -84,6 +85,7 @@ export default function PostsListScreen(props) {
 							phoneNumber={item.userData.phoneNumber}
 							userPhoto={item.userData.photoURL}
 							authorID={item.authorID}
+							created={item.created}
 						/>
 					);
 				}}
@@ -95,7 +97,7 @@ export default function PostsListScreen(props) {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: 'red',
+		backgroundColor: colors.steel,
 		width: '100%',
 		// alignItems: 'center',
 		alignSelf: 'center',

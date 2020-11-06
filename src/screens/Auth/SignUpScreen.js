@@ -32,6 +32,7 @@ const validationSchema = Yup.object().shape({
 });
 const SignUpScreen = () => {
 	const [error, setError] = useState(null);
+	const [user, setUser] = useState(null);
 	const navigation = useNavigation();
 
 	const goToLogIn = () => {
@@ -42,6 +43,7 @@ const SignUpScreen = () => {
 		const { email, password, displayName } = values;
 		try {
 			const response = await db.signupWithEmail(email, password);
+			console.log(response);
 			await db.createNewUser({
 				email: response.user.email,
 				uid: response.user.uid,
@@ -86,14 +88,14 @@ const SignUpScreen = () => {
 						<>
 							<View style={styles.innerView}>
 								<FormInput
-						displayName='displayName'
-										value={values.displayName}
-										onChangeText={handleChange('displayName')}
-										placeholder='Enter your full name'
-										iconName='md-person'
-										iconColor='#2C384A'
-										style={{ color: colors.white }}
-										onBlur={handleBlur('displayName')}
+									displayName='displayName'
+									value={values.displayName}
+									onChangeText={handleChange('displayName')}
+									placeholder='Enter your full name'
+									iconName='md-person'
+									iconColor='#2C384A'
+									style={{ color: colors.white }}
+									onBlur={handleBlur('displayName')}
 								/>
 								<ErrorMessage errorValue={touched.name && errors.name} />
 								<FormInput
@@ -141,11 +143,11 @@ const SignUpScreen = () => {
 										buttonType='outline'
 										onPress={handleSubmit}
 										title='SIGNUP'
-										buttonColor={colors.white}
+										buttonColor={colors.ochre}
 										disabled={!isValid || isSubmitting}
 										loading={isSubmitting}
-										style={{ color: colors.white }}
-										backgroundColor={colors.red}
+										style={{ color: colors.ochre }}
+										backgroundColor={colors.black}
 									/>
 								</View>
 								<ErrorMessage errorValue={errors.general} />
@@ -158,9 +160,8 @@ const SignUpScreen = () => {
 					title='Have an account? Login'
 					onPress={goToLogIn}
 					titleStyle={{
-						color: colors.white,
+						color: colors.ochre,
 					}}
-					type='clear'
 				/>
 			</View>
 		</KeyboardAwareScrollView>

@@ -24,33 +24,28 @@ const goodByeText = {
 export default function LogOut() {
 	const user = useContext(AuthContext);
 	return (
-		<Screen>
+
 			<ImageBackground
 				alt='theatre'
-				style={{ resizeMode: 'cover', height: windowHeight }}
-				source={{
-					uri:
-						'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
-				}}
+				style={{ resizeMode: 'contain', height: windowHeight }}
+				source={require('../../assets/splash.png')}
 			>
-				<View style={styles.innerView}>
-					<AppText style={styles.goodbye}>{goodByeText.text}</AppText>
-					<FormButton
-						buttonType='outline'
-						title='Log Out'
-						onPress={() => db.signOut()}
-						buttonColor={colors.white}
-						backgroundColor={colors.red}
-					/>
-				</View>
+				<AppText style={styles.goodbye}>{goodByeText.text}</AppText>
+				<FormButton
+					buttonType='outline'
+					title='Log Out'
+					onPress={() => db.signOut()}
+					buttonColor={colors.black}
+					backgroundColor={colors.white}
+				/>
 			</ImageBackground>
-		</Screen>
+
 	);
 }
 
 const styles = StyleSheet.create({
 	goodbye: {
-		color: colors.white,
+		color: colors.onyx,
 		fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
 		fontSize: 40,
 		fontWeight: 'bold',
@@ -58,14 +53,15 @@ const styles = StyleSheet.create({
 		marginTop: 64,
 		marginBottom: 64,
 	},
-	innerView: {
-		maxWidth: 500,
-		minWidth: 320,
-		width: '100%',
+	// innerView: {
+	// 	maxWidth: 500,
+	// 	minWidth: 320,
+	// 	width: '100%',
+	// 	height: 600,
+	// 	justifyContent: 'space-between',
+	// 	alignSelf: 'center',
 
-		alignSelf: 'center',
-		backgroundColor: 'rgba(0,0,0,.5)',
-		padding: 32,
-		fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
-	},
+	// 	padding: 32,
+	// 	fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
+	// },
 });

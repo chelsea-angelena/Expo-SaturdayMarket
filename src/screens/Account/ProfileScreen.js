@@ -4,6 +4,7 @@ import {
 	View,
 	ScrollView,
 	StyleSheet,
+	TouchableOpacity,
 	Text,
 	Image,
 	Dimensions,
@@ -25,78 +26,87 @@ import { AuthContext } from '../../Context/AuthContext.js';
 import colors from '../../styles/colors';
 import { useNavigation } from '@react-navigation/native';
 import MyPostsList from './MyPostsList';
-import useSWR from 'swr';
-import Screen from '../../Atoms/Screen';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Screen from '../../screens/Auth/Screen';
 
 export default function ProfileScreen({
 	signOut,
-	showEdit,
+
 	route,
 	onUpdate,
 	displayName,
 	photoURL,
 	email,
 	userId,
-	setShowEdit,
 }) {
 	const [myPosts, setMyPosts] = useState([]);
 	const [visible, setVisible] = useState(false);
 	const [error, setError] = useState(null);
+	const [showEdit, setShowEdit] = useState(false);
 
 	const toggleOverlay = () => {
 		setVisible(!visible);
 	};
 	const navigation = useNavigation();
 
-	// const getMyPosts = async () => {
-	// 	try {
-	// 		let result = await db.getUserPosts(userId);
-	// 		if (result.length >= 1) {
-	// 			setMyPosts(result);
-	// 		} else {
-	// 			null;
-	// 		}
-	// 	} catch (e) {
-	// 		setError(e);
-	// 	}
-	// };
+	const getMyPosts = async () => {
+		try {
+			let result = await db.getUserPosts(userId);
+			if (result.length >= 1) {
+				setMyPosts(result);
+			} else {
+				null;
+			}
+		} catch (e) {
+			setError(e);
+		}
+	};
 	const logOut = async () => {
 		await db.signOut();
 		navigation.navigate('TabNavigator', { screen: 'AuthStack' });
 	};
 
-	// useEffect(() => {
-	// 	getMyPosts();
-	// }, []);edi
+	useEffect(() => {
+		getMyPosts();
+	}, []);
 
 	// if (!userId) {
 	// 	return <Text>Loading....</Text>;
 	// }
+	// const onIconPress = async () => {
+	// 	!showEdit ? setShowEdit(true) : null;
+	// };
 
 	return (
-		<ScrollView>
-			<Card containerStyle={styles.container} wrapperStyle={styles.wrapper}>
-				{photoURL ? (
-					<Avatar rounded size='xlarge' source={{ uri: photoURL }}>
-						<Accessory size={24} onPress={() => setShowEdit(true)} />
-					</Avatar>
-				) : (
-					<Avatar
-						rounded
-						size='x-large'
-						icon={{ name: 'user', type: 'font-awesome' }}
-						containerStyle={{ backgroundColor: colors.drab }}
-						overlayContainerStyle={{ backgroundColor: colors.medGrey }}
+		<View style={styles.wrapper}>
+			<Card style={styles.container}>
+				<View style={styles.avatarView}>
+					<Avatar rounded size='xlarge' source={{ uri: photoURL }} />
+					<TouchableOpacity onPress={toggleOverlay}>
+						<MaterialCommunityIcons
+							name='account-edit'
+							color='black'
+							size={24}
+						/>
+					</TouchableOpacity>
+				</View>
+				<View style={{ maxHeight: 400 }}>
+					<Overlay
+						fullScreen={false}
+						animationType='slide'
+						isVisible={visible}
+						transparent={true}
+						style={{ height: 400 }}
+						onBackdropPress={toggleOverlay}
 					>
-						<Accessory size={24} onPress={() => setShowEdit(true)} />
-					</Avatar>
-				)}
-
-				{showEdit ? <EditProfile onUpdate={onUpdate} /> : null}
-
+						<EditProfile onUpdate={onUpdate} onToggleOverlay={toggleOverlay} />
+					</Overlay>
+				</View>
 				<Card.Title style={{ marginTop: 24 }}>Hello!</Card.Title>
 				<Card.Title style={{ marginTop: 24 }}>{displayName}</Card.Title>
-				<ListItem.Subtitle style={{ padding: 8 }}>{email}</ListItem.Subtitle>
+				<ListItem.Subtitle style={{ padding: 8, alignSelf: 'center' }}>
+					{email}
+				</ListItem.Subtitle>
 				<Divider />
 				<View>
 					<Divider
@@ -107,19 +117,16 @@ export default function ProfileScreen({
 							backgroundColor: colors.drab,
 						}}
 					/>
-					<ListItem.Subtitle style={{ alignSelf: 'center', padding: 8 }}>
-						Click to View and Edit Posts
-					</ListItem.Subtitle>
 
-					<Icon
+					{/* <Icon
 						type='material-community'
 						color='black'
 						size={32}
 						name='chevron-down'
 						onPress={toggleOverlay}
-					/>
+					/> */}
 				</View>
-				<View style={{ height: 300 }}>
+				<View>
 					{/* <Overlay
 						fullScreen={false}
 						animationType='slide'
@@ -130,30 +137,8 @@ export default function ProfileScreen({
 					<MyPostsList myPosts={myPosts} />
 					{/* </Overlay> */}
 				</View>
-
-				<View style={styles.buttonView}>
-					<Button
-						buttonStyle={{
-							width: 250,
-							borderRadius: 200,
-							color: colors.newBlue,
-							borderColor: colors.newBlue,
-						}}
-						titleStyle={{ color: colors.newBlue }}
-						type='outline'
-						raised
-						title='Sign Out'
-						icon={{
-							name: 'ios-exit',
-							size: 24,
-							type: 'ionicon',
-							color: colors.primaryYellow,
-						}}
-						onPress={logOut}
-					/>
-				</View>
 			</Card>
-		</ScrollView>
+		</View>
 	);
 }
 
@@ -171,7 +156,11 @@ const styles = StyleSheet.create({
 		width: '100%',
 		alignItems: 'center',
 		alignSelf: 'center',
-		height: 1000,
+	},
+	avatarView: {
+		alignItems: 'center',
+		alignSelf: 'center',
+		justifyContent: 'center',
 	},
 	socialRow: {
 		flexDirection: 'row',

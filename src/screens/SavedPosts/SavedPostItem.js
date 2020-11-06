@@ -32,7 +32,6 @@ const SavedPostItem = ({
 	postedBy,
 	altEmail,
 	email,
-	postId,
 	phoneNumber,
 	// authorID,
 	userPhoto,
@@ -45,17 +44,17 @@ const SavedPostItem = ({
 	// let oneMore = splicedTime[0].split('');
 	// let another = oneMore.splice(0, 5);
 	// let time = another.join('');
-
+	// console.log(item, "savedITem");
 	const { authorID, post, userData } = item;
-	console.log(item.id, 'savedITem');
+
 	const goToDetails = () => {
 		navigation.navigate('ListItemDetails', { item });
 	};
 	const user = useContext(AuthContext);
 	const userId = user.uid;
 	console.log(userId, 'userId');
-	// const postId = item.postedId;
-	console.log(postId, 'postId');
+	const postId = item.postedId;
+
 	return (
 		<Card style={styles.container}>
 			<View style={styles.wrapper}>

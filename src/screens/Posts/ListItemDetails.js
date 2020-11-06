@@ -10,12 +10,13 @@ import {
 import { Button } from 'react-native-elements';
 import { Icon, Card, ListItem, Divider, Avatar } from 'react-native-elements';
 import colors from '../../styles/colors';
-// import UserMap from '../Posts/UserMap';
+import UserMap from '../Posts/UserMap';
 import * as db from '../../config/firebaseConfig';
 import { AuthContext } from '../../Context/AuthContext';
 
 const ListItemDetails = ({ navigation, route }, props) => {
 	const { item } = route.params;
+
 	const [isSaved, setIsSaved] = useState(false);
 	const [savedList, setSavedList] = useState([]);
 	const [error, setError] = useState(null);
@@ -70,47 +71,6 @@ const ListItemDetails = ({ navigation, route }, props) => {
 		getSaved();
 	}, []);
 
-	// const onIconPress = async () => {
-	// 	if (isSaved) {
-	// 		try {
-	// 			await db.deleteSavedPost(postId, userId);
-	// 			setIsSaved(false);
-	// 		} catch (e) {
-	// 			setError(e);
-	// 		}
-	// 	}
-	// 	if (!isSaved) {
-	// 		try {
-	// 			await db.savePost(postId, userId);
-	// 			setIsSaved(true);
-	// 		} catch (e) {
-	// 			setError(e);
-	// 		}
-	// 	}
-	// };
-	// const savePost = async () => {
-	// 	console.log(postId);
-	// 	try {
-	// 		let result = await db.savePost(postId, userId);
-	// 		console.log(result);
-	// 		setIsSaved(true);
-	// 	} catch (e) {
-	// 		setError(e);
-	// 	}
-	// };
-	// const checkIfSaved = async () => {
-	// 	try {
-	// 		let response = await db.checkIfSaved(postId, userId);
-	// 		setIsSaved(true);
-	// 	} catch (e) {
-	// 		console.log(e);
-	// 	}
-	// };
-
-	// useEffect(() => {
-	// 	checkIfSaved();
-	// }, []);
-
 	if (!userId) {
 		return <Text>Loading...</Text>;
 	}
@@ -122,20 +82,20 @@ const ListItemDetails = ({ navigation, route }, props) => {
 			<View style={styles.container}>
 				<Card
 					style={styles.wrapper}
-					containerStyle={{
-						width: '100%',
-						// alignSelf: 'center',
-						alignItems: 'center',
-						justifyContent: 'center',
-						marginTop: 32,
-						marginBottom: 32,
-					}}
-					wrapperStyle={{
-						width: '100%',
+					// containerStyle={{
+					// 	width: '100%',
+					// 	// alignSelf: 'center',
+					// 	alignItems: 'center',
+					// 	justifyContent: 'center',
+					// 	marginTop: 32,
+					// 	marginBottom: 32,
+					// }}
+					// wrapperStyle={{
+					// 	width: '100%',
 
-						alignItems: 'center',
-						justifyContent: 'center',
-					}}
+					// 	alignItems: 'center',
+					// 	justifyContent: 'center',
+					// }}
 				>
 					<Card.Image
 						source={{ uri: image }}
@@ -152,42 +112,28 @@ const ListItemDetails = ({ navigation, route }, props) => {
 					<Text style={styles.contentText}>{description}</Text>
 
 					<Text style={styles.contentText}>{category}</Text>
-					<Button
-						onPress={toggleSaved}
-						title={isSaved ? 'Un-Save' : 'Save'}
-						style={
-							isSaved ? { backgroundColor: 'red' } : { backgroundColor: 'blue' }
-						}
-					/>
-
-					{/* {isSaved ? (
+					<View style={styles.contentText}>
 						<Icon
-							onPress={removeSave}
+							onPress={toggleSaved}
 							type='material-community'
 							raised
-
 							name='heart'
-							color={colors.red}
+							color={isSaved ? colors.ochre : colors.lightGrey}
 							underlayColor={colors.darkGrey}
 						/>
+					</View>
+					{isSaved ? (
+						<Text style={styles.contentText}>Saved</Text>
 					) : (
-						<Icon
-							disabled
-							disabledStyle={{ color: colors.red }}
-							onPress={savePost}
-							type='material-community'
-							raised
-
-							name='heart'
-							color={colors.medGrey}
-							underlayColor={colors.darkGrey}
-						/>
-					)} */}
-					<ListItem.Subtitle style={styles.date}>Posted on:</ListItem.Subtitle>
-					<ListItem.Subtitle style={styles.date}>
+						<Text style={styles.contentText}>Click To Save</Text>
+					)}
+					<ListItem.Subtitle style={(styles.date, styles.contentText)}>
+						Posted on:
+					</ListItem.Subtitle>
+					<ListItem.Subtitle style={(styles.date, styles.contentText)}>
 						{splicedDate[0]} {splicedDate[1]} {splicedDate[2]} {splicedDate[3]}
 					</ListItem.Subtitle>
-					<ListItem.Subtitle style={styles.date}>
+					<ListItem.Subtitle style={(styles.date, styles.contentText)}>
 						at {time} PST
 					</ListItem.Subtitle>
 					<View style={styles.container}>
@@ -229,7 +175,7 @@ const ListItemDetails = ({ navigation, route }, props) => {
 							</TouchableOpacity>
 						</Card>
 					</View>
-					{/* {userMap ? <UserMap location={location} /> : null} */}
+		 <UserMap location={location} />
 				</Card>
 			</View>
 		</ScrollView>
@@ -245,12 +191,14 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		marginTop: 32,
 		marginBottom: 32,
+		flex: 1,
 	},
 	wrapper: {
 		width: '100%',
 		alignSelf: 'center',
 		alignItems: 'center',
 		justifyContent: 'center',
+		textAlign: 'center',
 	},
 	text: {
 		color: 'black',
@@ -268,6 +216,9 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		paddingTop: 4,
 		paddingBottom: 8,
+		alignItems: 'center',
+		justifyContent: 'center',
+		alignSelf: 'center',
 	},
 	notrow: {
 		flexDirection: 'column',

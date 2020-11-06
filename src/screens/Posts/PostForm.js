@@ -21,7 +21,7 @@ import useLocation from '../../hooks/useLocation';
 // import CategoryModal from './Categories';
 import colors from '../../styles/colors';
 import Logo from '../../Atoms/Logo';
-// import UserMap from './UserMap';
+import UserMap from './UserMap';
 import { useNavigation } from '@react-navigation/native';
 // import Screen from '../../Atoms/Screen';
 
@@ -47,7 +47,9 @@ export default function PostForm() {
 	const [location] = useLocation();
 	const navigation = useNavigation();
 	const [error, setError] = useState(null);
-
+	const [userData, setUserData] = useState({});
+	const { latitude, longitude } = location;
+	console.log(latitude, longitude);
 	const toggleOverlay = () => {
 		setVisible(!visible);
 	};
@@ -63,36 +65,41 @@ export default function PostForm() {
 	// };
 
 	const user = useContext(AuthContext);
-	let userId = user.uid;
+	const userId = user.uid;
+	console.log(userId);
 
-	const submitPostForm = (values) => {
-		const { displayName, email, photoURL } = user;
+	const submitPostForm = async (values) => {
+		let { displayName, email, photoURL } = userData;
+		const { latitude, longitude } = location;
+
 		try {
-			let response = db.createPost(
-				values,
+			let response = await db.createPost(
+				userId,
 				displayName,
-				photoURL,
 				email,
-				location,
-				userId
+				photoURL,
+				values,
+				location
 			);
 			console.log(response);
 		} catch (error) {
 			setError(error);
-			// } finally {
-			// setIsSubmitting(false);
-			// navigation.navigate('PostsStack', {
-			// 	screen: 'PostsListScreen',
-			// });
 		}
 	};
-	const handleRemove = (uri) => {
-    setFieldValue(
-      name,
-      imageUris.filter((imageUri) => imageUri !== uri)
-    );
-  };
-	if (!user) {
+
+	useEffect(() => {
+		const getUserData = async () => {
+			try {
+				let result = await db.getDoc(userId);
+				let data = result[0];
+				setUserData(data);
+			} catch (e) {
+				setError(e);
+			}
+		};
+		getUserData();
+	}, []);
+	if (!userData && user) {
 		return <Text>Loading..</Text>;
 	}
 	return (
@@ -214,13 +221,13 @@ export default function PostForm() {
 											updateCategory={setCategory}
 										/>
 									</Overlay> */}
-								{/* <CheckBox
+								<CheckBox
 									title='Include a Map with your location?'
 									status={checked ? 'checked' : 'unchecked'}
 									onPress={() => setChecked(!checked)}
 									containerStyle={styles.box}
-								/> */}
-								{/* {checked ? <UserMap location={location} /> : null} */}
+								/>
+								{checked ? <UserMap location={location} /> : null}
 								<View style={styles.buttonContainer}>
 									<PostFormButton
 										buttonType='outline'

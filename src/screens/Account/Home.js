@@ -24,36 +24,39 @@ export default function Home(props) {
 	const [photoURL, setPhotoURL] = useState(user.photoURL);
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(true);
-	const [showEdit, setShowEdit] = useState(false);
 
-	const { uid } = user;
+	const userId = user.uid;
+	console.log(userId);
 
-	const getUserData = async () => {
+	const getUserProfileData = async () => {
 		try {
-			let result = await db.getUserData();
-			setDisplayName(result.displayName);
-			setPhotoURL(result.photoURL);
-			setEmail(result.email);
+			let result = await db.getDoc(userId);
+			result.map((result) => {
+				setDisplayName(result.displayName);
+				setPhotoURL(result.photoURL);
+				setEmail(result.email);
+			});
 		} catch (e) {
 			setError(e);
 		} finally {
 			setLoading(false);
-			setShowEdit(false);
 		}
 	};
 
-	const updateProfile = async (values) => {
+	const updateProfile = async (values, userId) => {
+		let { images, displayName } = values;
+		let { data } = images;
 		try {
-			let result = await db.updateUserProfile(values, user);
+			await db.updateUserProfile(values, userId);
 		} catch (error) {
-			console.error(error);
+			setError(error);
 		} finally {
-			getUserData();
+			getUserProfileData();
 		}
 	};
 
 	useEffect(() => {
-		getUserData();
+		getUserProfileData();
 	}, []);
 
 	const signOut = async () => {
@@ -65,10 +68,8 @@ export default function Home(props) {
 	return (
 		<SafeAreaView>
 			<ProfileScreen
-				showEdit={showEdit}
-				setShowEdit={setShowEdit}
 				onUpdate={updateProfile}
-				userid={uid}
+				userId={userId}
 				displayName={displayName}
 				photoURL={photoURL}
 				email={email}

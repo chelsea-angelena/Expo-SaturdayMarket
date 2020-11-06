@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { PostsStack, AccountStack, SavedPostsStack } from './index';
 import PostForm from '../screens/Posts/PostForm';
 import LogOut from '../screens/Account/LogOut';
-import SavedPosts from '../screens/SavedPosts/SavedPosts'
+import SavedPosts from '../screens/SavedPosts/SavedPosts';
 import colors from '../styles/colors';
 
 const Tab = createMaterialBottomTabNavigator();
@@ -15,7 +15,7 @@ export default function TabNavigator() {
 			activeTintColor={colors.snow}
 			inactiveTintColor={colors.white}
 			barStyle={{
-				backgroundColor: 'hsl(221, 51%, 16%)',
+				backgroundColor: colors.drab,
 			}}
 			initialRoute='PostsStack'
 			screenOptions={{ headerShown: false }}
