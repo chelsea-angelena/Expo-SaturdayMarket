@@ -111,5 +111,5 @@ buck-out/
 .expo/*
 web-build/
 GoogleService-Info.plist
-google-service.json
+google-services.json
 # @end expo-cli
