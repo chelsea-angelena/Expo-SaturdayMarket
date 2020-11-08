@@ -24,22 +24,28 @@ const goodByeText = {
 export default function LogOut() {
 	const user = useContext(AuthContext);
 	return (
-
-			<ImageBackground
-				alt='theatre'
-				style={{ resizeMode: 'contain', height: windowHeight }}
-				source={require('../../assets/splash.png')}
+		<ImageBackground
+			alt='theatre'
+			style={{ resizeMode: 'contain', height: windowHeight }}
+			source={require('../../assets/splash.png')}
+		>
+			<View
+				style={{
+					alignSelf: 'center',
+					justifyContent: 'flex-end',
+					height: '75%',
+					width: 300,
+				}}
 			>
-				<AppText style={styles.goodbye}>{goodByeText.text}</AppText>
 				<FormButton
 					buttonType='outline'
 					title='Log Out'
 					onPress={() => db.signOut()}
 					buttonColor={colors.black}
-					backgroundColor={colors.white}
+					style={{ backgroundColor: colors.white }}
 				/>
-			</ImageBackground>
-
+			</View>
+		</ImageBackground>
 	);
 }
 

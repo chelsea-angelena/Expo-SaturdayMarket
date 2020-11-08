@@ -16,7 +16,13 @@ import MaterialCommunityIcon from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import MyPostListItem from './MyPostListItem';
 
-export default function MyPostsList({ myPosts, signOut, userId, user }) {
+export default function MyPostsList({
+	myPosts,
+	signOut,
+	userId,
+	user,
+	onDelete,
+}) {
 	return (
 		<>
 			<View style={styles.view}>
@@ -25,7 +31,12 @@ export default function MyPostsList({ myPosts, signOut, userId, user }) {
 					keyExtractor={(myPosts) => myPosts.id}
 					renderItem={({ item }) => {
 						return (
-							<MyPostListItem item={item} signOut={signOut} userId={userId} />
+							<MyPostListItem
+								item={item}
+								signOut={signOut}
+								userId={userId}
+								onDeleteItem={onDelete}
+							/>
 						);
 					}}
 				/>
@@ -33,12 +44,10 @@ export default function MyPostsList({ myPosts, signOut, userId, user }) {
 		</>
 	);
 }
-
 const styles = StyleSheet.create({
 	image: {
 		width: 200,
 		height: 200,
-
 	},
 	view: {
 		height: 450,

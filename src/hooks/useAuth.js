@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
-import * as db from '../config/firebaseConfig';
 import { auth } from '../config/firebaseConfig';
 
 export const useAuth = () => {

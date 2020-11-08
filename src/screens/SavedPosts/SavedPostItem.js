@@ -1,59 +1,28 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, {useContext } from 'react';
 import {
-	Image,
 	StyleSheet,
-	FlatList,
 	View,
-	Text,
-	TouchableOpacity,
 } from 'react-native';
 import {
-	Divider,
 	Card,
 	ListItem,
-	Button,
-	Icon,
 	Avatar,
 } from 'react-native-elements';
-import * as db from '../../config/firebaseConfig';
 import { AuthContext } from '../../Context/AuthContext';
-import { useNavigation } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const SavedPostItem = ({
-	item,
-	title,
-	// created,
-	description,
-	price,
-	savedPostId,
-	category,
-	image,
-	postedBy,
-	altEmail,
-	email,
-	phoneNumber,
-	// authorID,
-	userPhoto,
-	navigation,
-}) => {
-	// let Date = created.toDate();
-	// let dateArr = Date.toString().split(' ');
-	// let splicedDate = dateArr.splice(0, 4);
-	// let splicedTime = dateArr.splice(0, 1);
-	// let oneMore = splicedTime[0].split('');
-	// let another = oneMore.splice(0, 5);
-	// let time = another.join('');
-	// console.log(item, "savedITem");
-	const { authorID, post, userData } = item;
+const SavedPostItem = ({ item, navigation }) => {
+	console.log(item, 'item');
+	const { authorID, post, created, userData, id } = item;
+	const { description, title, category, image, location, price } = post;
+	const { displayName, altEmail, email, phoneNumber, photoURL } = userData;
 
-	const goToDetails = () => {
-		navigation.navigate('ListItemDetails', { item });
+	const goToDetails = async () => {
+		await navigation.navigate('ListItemDetails', { item });
 	};
+
 	const user = useContext(AuthContext);
 	const userId = user.uid;
-	console.log(userId, 'userId');
-	const postId = item.postedId;
 
 	return (
 		<Card style={styles.container}>

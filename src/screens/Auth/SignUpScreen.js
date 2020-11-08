@@ -8,11 +8,13 @@ import FormInput from './FormInput';
 import FormButton from './FormButton';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { CheckBox, Button } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import ErrorMessage from './ErrorMessage';
 import Logo from '../../Atoms/Logo';
 import colors from '../../styles/colors';
 import { AuthContext } from '../../Context/AuthContext';
+import Text from '../../Atoms/AppText';
+
 const validationSchema = Yup.object().shape({
 	displayName: Yup.string()
 		.label('Name')
@@ -32,7 +34,7 @@ const validationSchema = Yup.object().shape({
 });
 const SignUpScreen = () => {
 	const [error, setError] = useState(null);
-	const [user, setUser] = useState(null);
+	const user = useContext(AuthContext);
 	const navigation = useNavigation();
 
 	const goToLogIn = () => {
@@ -156,9 +158,11 @@ const SignUpScreen = () => {
 					)}
 				</Formik>
 
+				<Text style={{ alignSelf: 'center' }}>Have an account? </Text>
 				<Button
-					title='Have an account? Login'
+					title='Sign In'
 					onPress={goToLogIn}
+					type='clear'
 					titleStyle={{
 						color: colors.ochre,
 					}}
@@ -175,6 +179,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: colors.white,
 		paddingTop: 15,
+		paddingBottom: 32,
 	},
 	logoContainer: {
 		marginBottom: 15,

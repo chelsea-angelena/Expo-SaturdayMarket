@@ -1,21 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import * as db from '../../config/firebaseConfig.js';
 import { AuthContext } from '../../Context/AuthContext';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, ActivityIndicator } from 'react-native';
 import ProfileScreen from './ProfileScreen';
-import {
-	Divider,
-	Overlay,
-	Icon,
-	Button,
-	Card,
-	ListItem,
-	Avatar,
-	Accessory,
-} from 'react-native-elements';
-import { Alert } from 'react-native';
-import colors from '../../styles/colors';
 
 export default function Home(props) {
 	const user = useContext(AuthContext);
@@ -26,7 +13,6 @@ export default function Home(props) {
 	const [loading, setLoading] = useState(true);
 
 	const userId = user.uid;
-	console.log(userId);
 
 	const getUserProfileData = async () => {
 		try {
@@ -48,13 +34,14 @@ export default function Home(props) {
 		let { data } = images;
 		try {
 			await db.updateUserProfile(values, userId);
+			setLoading(true);
 		} catch (error) {
 			setError(error);
 		} finally {
 			getUserProfileData();
+			setLoading(false);
 		}
 	};
-
 	useEffect(() => {
 		getUserProfileData();
 	}, []);
@@ -63,10 +50,10 @@ export default function Home(props) {
 		await db.signOut();
 	};
 	if (loading) {
-		return <Text>Loading...</Text>;
+		return <ActivityIndicator size='large' color='blue' />;
 	}
 	return (
-		<SafeAreaView>
+		<ScrollView>
 			<ProfileScreen
 				onUpdate={updateProfile}
 				userId={userId}
@@ -75,6 +62,6 @@ export default function Home(props) {
 				email={email}
 				signOut={signOut}
 			/>
-		</SafeAreaView>
+		</ScrollView>
 	);
 }

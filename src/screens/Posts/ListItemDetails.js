@@ -1,39 +1,34 @@
 import React, { useContext, useState, useEffect } from 'react';
 import {
+	ActivityIndicator,
 	ScrollView,
+	Platform,
 	Image,
-	Text,
 	View,
 	StyleSheet,
 	TouchableOpacity,
 } from 'react-native';
-import { Button } from 'react-native-elements';
 import { Icon, Card, ListItem, Divider, Avatar } from 'react-native-elements';
 import colors from '../../styles/colors';
-import UserMap from '../Posts/UserMap';
+// import UserMap from '../Posts/UserMap';
 import * as db from '../../config/firebaseConfig';
 import { AuthContext } from '../../Context/AuthContext';
+import Text from '../../Atoms/AppText';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ListItemDetails = ({ navigation, route }, props) => {
-	const { item } = route.params;
-
+	let { item } = route.params;
 	const [isSaved, setIsSaved] = useState(false);
 	const [savedList, setSavedList] = useState([]);
 	const [error, setError] = useState(null);
-
 	const user = useContext(AuthContext);
 	const userId = user.uid;
-
-	let { created, post, userData, authorID, id } = item;
-	let { location, title, category, description, image, price } = post;
-
+	let { post, created, userData, id, authorID } = item;
+	let { title, category, description, image, location, price } = post;
 	let { altEmail, email, displayName, phoneNumber, photoURL } = userData;
-
 	let profileID = authorID;
-	let postId = id;
-
 	let listItemDate = created;
-
+	let postId = id;
 	let dateFormat = listItemDate.toDate();
 	let dateArr = dateFormat.toString().split(' ');
 	let splicedDate = dateArr.splice(0, 4);
@@ -46,20 +41,22 @@ const ListItemDetails = ({ navigation, route }, props) => {
 		await db.deleteSavedPost(postId, userId);
 		setIsSaved(false);
 	};
+
 	const savePost = async () => {
-		let result = await db.savePost(postId, userId);
+		await db.savePost(item, userId);
 		setIsSaved(true);
 	};
 	const toggleSaved = () => {
 		!isSaved ? savePost() : removeSave();
 	};
+
 	const getSaved = async () => {
 		try {
-			let saved = await db.getSavedPosts(userId)((saved) =>
-				saved.filter((post) => post === post)
-			);
+			let saved = await db
+				.getSavedPosts(userId)
+				.then((saved) => saved.filter((post) => post === post));
 			setSavedList(saved);
-			if (saved.length >= 1) {
+			if (saved === true) {
 				setIsSaved(true);
 			}
 		} catch (e) {
@@ -67,77 +64,66 @@ const ListItemDetails = ({ navigation, route }, props) => {
 		}
 	};
 
-	useEffect(() => {
-		getSaved();
-	}, []);
+	useFocusEffect(
+		React.useCallback(() => {
+			getSaved();
+			return undefined;
+		}, [])
+	);
 
 	if (!userId) {
-		return <Text>Loading...</Text>;
-	}
-	if (!postId) {
-		return <Text>Loading...</Text>;
+		return <Text>Loading..</Text>;
 	}
 	return (
 		<ScrollView>
 			<View style={styles.container}>
-				<Card
-					style={styles.wrapper}
-					// containerStyle={{
-					// 	width: '100%',
-					// 	// alignSelf: 'center',
-					// 	alignItems: 'center',
-					// 	justifyContent: 'center',
-					// 	marginTop: 32,
-					// 	marginBottom: 32,
-					// }}
-					// wrapperStyle={{
-					// 	width: '100%',
-
-					// 	alignItems: 'center',
-					// 	justifyContent: 'center',
-					// }}
-				>
-					<Card.Image
-						source={{ uri: image }}
+				<Card style={styles.wrapper}>
+					<Image
+						PlaceholderContent={<ActivityIndicator />}
 						resizeMode='cover'
-						style={styles.cardImage}
+						style={{ height: 300, width: '100%' }}
+						source={{ uri: image }}
+						alt='Posted Image'
 					/>
-					<View style={styles.notrow}>
-						<Card.Title style={styles.titleText}>{title}</Card.Title>
-						<ListItem.Subtitle style={styles.subtitleText}>
-							$ {price}
-						</ListItem.Subtitle>
-					</View>
-					<Card.Divider />
-					<Text style={styles.contentText}>{description}</Text>
+					<Card.Title style={styles.titleText}>{title}</Card.Title>
 
-					<Text style={styles.contentText}>{category}</Text>
-					<View style={styles.contentText}>
-						<Icon
-							onPress={toggleSaved}
-							type='material-community'
-							raised
-							name='heart'
-							color={isSaved ? colors.ochre : colors.lightGrey}
-							underlayColor={colors.darkGrey}
-						/>
-					</View>
-					{isSaved ? (
-						<Text style={styles.contentText}>Saved</Text>
-					) : (
-						<Text style={styles.contentText}>Click To Save</Text>
-					)}
-					<ListItem.Subtitle style={(styles.date, styles.contentText)}>
-						Posted on:
-					</ListItem.Subtitle>
-					<ListItem.Subtitle style={(styles.date, styles.contentText)}>
+					<Card.Divider />
+					<Card style={styles.innerCard}>
+						<Text style={styles.contentTextBold}>Price: </Text>
+						<Text style={styles.contentTextBold}>$ {price}</Text>
+						<Card.Divider />
+						<Text style={styles.contentTextBold}>Description: </Text>
+						<Text style={styles.contentText}>{description}</Text>
+						<Card.Divider />
+						<Text style={styles.contentTextBold}>Category: </Text>
+						<Text style={styles.contentText}>{category}</Text>
+						<Card.Divider />
+						{!isSaved ? (
+							<Text style={styles.contentTextBold}>Save:</Text>
+						) : (
+							<Text style={styles.contentTextBold}>UnSave:</Text>
+						)}
+						<View style={styles.contentText}>
+							<Icon
+								onPress={toggleSaved}
+								type='material-community'
+								raised
+								name='heart'
+								color={isSaved ? colors.ochre : colors.medGrey}
+								underlayColor={colors.darkGrey}
+								reverseColor='Red'
+							/>
+						</View>
+					</Card>
+					<Text style={styles.contentTextBold}>Posted on: </Text>
+					<Text style={styles.contentText}>
 						{splicedDate[0]} {splicedDate[1]} {splicedDate[2]} {splicedDate[3]}
-					</ListItem.Subtitle>
-					<ListItem.Subtitle style={(styles.date, styles.contentText)}>
-						at {time} PST
-					</ListItem.Subtitle>
+					</Text>
+
+					<Text style={(styles.date, styles.contentText)}>at {time} PST</Text>
 					<View style={styles.container}>
 						<Card style={styles.wrapper}>
+							<Text style={styles.contentTextBold}>Posted by: </Text>
 							<Avatar
 								source={{ uri: photoURL }}
 								size='large'
@@ -164,7 +150,7 @@ const ListItemDetails = ({ navigation, route }, props) => {
 								}
 							>
 								<View style={styles.row}>
-									<Text>See More Posts</Text>
+									<Text style={{ alignSelf: 'center' }}>See More Posts</Text>
 									<Icon
 										type='material-community'
 										name='chevron-right'
@@ -175,7 +161,7 @@ const ListItemDetails = ({ navigation, route }, props) => {
 							</TouchableOpacity>
 						</Card>
 					</View>
-		 <UserMap location={location} />
+					{/* <UserMap location={location} /> */}
 				</Card>
 			</View>
 		</ScrollView>
@@ -185,19 +171,14 @@ const ListItemDetails = ({ navigation, route }, props) => {
 export default ListItemDetails;
 const styles = StyleSheet.create({
 	container: {
-		width: '100%',
-		alignSelf: 'center',
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginTop: 32,
 		marginBottom: 32,
-		flex: 1,
 	},
 	wrapper: {
 		width: '100%',
+		minWidth: 300,
 		alignSelf: 'center',
 		alignItems: 'center',
-		justifyContent: 'center',
+
 		textAlign: 'center',
 	},
 	text: {
@@ -206,36 +187,46 @@ const styles = StyleSheet.create({
 	},
 	profileCard: {
 		alignItems: 'center',
-		justifyContent: 'center',
+
 		width: 400,
 	},
 	avatar: {
 		alignSelf: 'center',
 	},
 	contentText: {
-		fontSize: 14,
+		fontSize: 16,
 		paddingTop: 4,
 		paddingBottom: 8,
 		alignItems: 'center',
-		justifyContent: 'center',
+
 		alignSelf: 'center',
+	},
+	contentTextBold: {
+		fontSize: 16,
+		paddingTop: 4,
+		paddingBottom: 8,
+		alignItems: 'center',
+
+		alignSelf: 'center',
+		fontWeight: 'bold',
 	},
 	notrow: {
 		flexDirection: 'column',
-		fontSize: 12,
+		fontSize: 14,
 		alignItems: 'center',
 		justifyContent: 'center',
 		padding: 8,
 	},
 	row: {
 		flexDirection: 'row',
-		fontSize: 12,
+		fontSize: 14,
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		padding: 8,
 	},
 	titleText: {
-		fontSize: 14,
+		fontSize: 22,
+		fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
 	},
 	subtitleText: {
 		fontWeight: 'bold',
@@ -252,5 +243,9 @@ const styles = StyleSheet.create({
 	},
 	appButtonDisabled: {
 		backgroundColor: 'red',
+	},
+	innerCard: {
+		width: 300,
+		backgroundColor: colors.lightGrey,
 	},
 });

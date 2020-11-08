@@ -1,31 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FlatList, View, StyleSheet, Text, Image } from 'react-native';
-// import * as db from '../../config/firebaseConfig';
-// import { UserContext } from '../../../App';
-import {
-	Divider,
-	Icon,
-	Button,
-	Card,
-	ListItem,
-	Avatar,
-	Accessory,
-} from 'react-native-elements';
+import { Divider, Icon, Button, Card, ListItem } from 'react-native-elements';
 import colors from '../../styles/colors';
-// import MaterialCommunityIcon from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import * as db from '../../config/firebaseConfig';
-const MyPostListItem = ({ item }) => {
+
+const MyPostListItem = ({ item, onDeleteItem }) => {
 	const { created, post, userData } = item;
 	const { category, title, price, description, image, location } = post;
-	// let Date = created.toDate();
-	// let dateArr = Date.toString().split(' ');
-	// let splicedDate = dateArr.splice(0, 4);
-	// let splicedTime = dateArr.splice(0, 1);
-	// let oneMore = splicedTime[0].split('');
-	// let another = oneMore.splice(0, 5);
-	// let time = another.join('');
-
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [error, setError] = useState(null);
 	let postId = item.id;
@@ -43,14 +24,6 @@ const MyPostListItem = ({ item }) => {
 		navigation.navigate('ListItemDetails', { item });
 	};
 
-	const deletePost = async () => {
-		try {
-			await db.deletePost(postId);
-			setIsDisabled(true);
-		} catch (e) {
-			setError(e);
-		}
-	};
 	return (
 		<Card
 			containerStyle={{
@@ -80,8 +53,9 @@ const MyPostListItem = ({ item }) => {
 					</Card.Title>
 					<Card.Divider />
 					<ListItem.Subtitle style={styles.date}>
-						{splicedDate[0]} {splicedDate[1]} {splicedDate[2]}at: {time} PST
+						{splicedDate[0]} {splicedDate[1]} {splicedDate[2]}
 					</ListItem.Subtitle>
+					<ListItem.Subtitle style={styles.date}>{time} PST</ListItem.Subtitle>
 				</View>
 				<Icon
 					type='material-community'
@@ -93,29 +67,23 @@ const MyPostListItem = ({ item }) => {
 				/>
 				<Divider />
 			</View>
+			<Divider
+				style={{
+					width: 300,
+
+					backgroundColor: colors.lightGrey,
+				}}
+			/>
 			<View
-				style={{ flexDirection: 'row', padding: 8, justifyContent: 'center' }}
+				style={{ flexDirection: 'row', justifyContent: 'flex-end', padding: 6 }}
 			>
-				<Icon
-					type='feather'
-					name='edit'
-					size={24}
-					color='black'
-					// style={{ marginLeft: 24 }}
-					// disabled={!isDisabled}
-					raised
-					containerStyle={{ backgroundColor: 'pink' }}
-					color={colors.medGrey}
-					underlayColor={colors.darkGrey}
-				/>
 				<Icon
 					type='material-community'
 					name='trash-can-outline'
 					size={26}
 					color='black'
-					onPress={deletePost}
+					onPress={() => onDeleteItem(postId)}
 					disabled={isDisabled}
-					raised
 					color={colors.medGrey}
 					underlayColor={colors.darkGrey}
 				/>
@@ -147,8 +115,8 @@ const styles = StyleSheet.create({
 		maxWidth: '100%',
 	},
 	image: {
-		width: 100,
-		height: 75,
+		width: 150,
+		height: 100,
 		padding: 16,
 		borderRadius: 4,
 	},

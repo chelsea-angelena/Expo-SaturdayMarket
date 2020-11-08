@@ -1,38 +1,22 @@
-import React, { useState, useEffect, useContext } from 'react';
-import {
-	FlatList,
-	View,
-	ScrollView,
-	StyleSheet,
-	TouchableOpacity,
-	Text,
-	Image,
-	Dimensions,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import * as db from '../../config/firebaseConfig';
-import { UserContext } from '../../../App';
+
 import {
 	Divider,
 	Overlay,
-	Icon,
-	Button,
 	Card,
 	ListItem,
 	Avatar,
-	Accessory,
 } from 'react-native-elements';
 import EditProfile from './EditProfile';
-import { AuthContext } from '../../Context/AuthContext.js';
+
 import colors from '../../styles/colors';
 import { useNavigation } from '@react-navigation/native';
 import MyPostsList from './MyPostsList';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Screen from '../../screens/Auth/Screen';
 
 export default function ProfileScreen({
-	signOut,
-
-	route,
 	onUpdate,
 	displayName,
 	photoURL,
@@ -42,8 +26,6 @@ export default function ProfileScreen({
 	const [myPosts, setMyPosts] = useState([]);
 	const [visible, setVisible] = useState(false);
 	const [error, setError] = useState(null);
-	const [showEdit, setShowEdit] = useState(false);
-
 	const toggleOverlay = () => {
 		setVisible(!visible);
 	};
@@ -66,6 +48,14 @@ export default function ProfileScreen({
 		navigation.navigate('TabNavigator', { screen: 'AuthStack' });
 	};
 
+	const deletePostItem = async (postId) => {
+		try {
+			await db.deletePost(postId);
+		} catch (e) {
+			setError(e);
+		}
+		getMyPosts();
+	};
 	useEffect(() => {
 		getMyPosts();
 	}, []);
@@ -78,67 +68,72 @@ export default function ProfileScreen({
 	// };
 
 	return (
-		<View style={styles.wrapper}>
-			<Card style={styles.container}>
-				<View style={styles.avatarView}>
-					<Avatar rounded size='xlarge' source={{ uri: photoURL }} />
-					<TouchableOpacity onPress={toggleOverlay}>
-						<MaterialCommunityIcons
-							name='account-edit'
-							color='black'
-							size={24}
+		<ScrollView>
+			<View style={styles.wrapper}>
+				<Card style={styles.container}>
+					<View style={styles.avatarView}>
+						<Avatar rounded size='xlarge' source={{ uri: photoURL }} />
+						<TouchableOpacity onPress={toggleOverlay}>
+							<MaterialCommunityIcons
+								name='account-edit'
+								color='black'
+								size={24}
+							/>
+						</TouchableOpacity>
+					</View>
+					<View style={{ maxHeight: 400 }}>
+						<Overlay
+							fullScreen={false}
+							animationType='slide'
+							isVisible={visible}
+							transparent={true}
+							style={{ height: 400 }}
+							onBackdropPress={toggleOverlay}
+						>
+							<EditProfile
+								onUpdate={onUpdate}
+								onToggleOverlay={toggleOverlay}
+							/>
+						</Overlay>
+					</View>
+					<Card.Title style={{ marginTop: 24 }}>Hello!</Card.Title>
+					<Card.Title style={{ marginTop: 24 }}>{displayName}</Card.Title>
+					<ListItem.Subtitle style={{ padding: 8, alignSelf: 'center' }}>
+						{email}
+					</ListItem.Subtitle>
+					
+					<View>
+						<Divider
+							style={{
+								margin: 24,
+								width: 300,
+								padding: 0.5,
+								backgroundColor: colors.drab,
+							}}
 						/>
-					</TouchableOpacity>
-				</View>
-				<View style={{ maxHeight: 400 }}>
-					<Overlay
-						fullScreen={false}
-						animationType='slide'
-						isVisible={visible}
-						transparent={true}
-						style={{ height: 400 }}
-						onBackdropPress={toggleOverlay}
-					>
-						<EditProfile onUpdate={onUpdate} onToggleOverlay={toggleOverlay} />
-					</Overlay>
-				</View>
-				<Card.Title style={{ marginTop: 24 }}>Hello!</Card.Title>
-				<Card.Title style={{ marginTop: 24 }}>{displayName}</Card.Title>
-				<ListItem.Subtitle style={{ padding: 8, alignSelf: 'center' }}>
-					{email}
-				</ListItem.Subtitle>
-				<Divider />
-				<View>
-					<Divider
-						style={{
-							margin: 24,
-							width: 300,
-							padding: 0.5,
-							backgroundColor: colors.drab,
-						}}
-					/>
 
-					{/* <Icon
+						{/* <Icon
 						type='material-community'
 						color='black'
 						size={32}
 						name='chevron-down'
 						onPress={toggleOverlay}
 					/> */}
-				</View>
-				<View>
-					{/* <Overlay
+					</View>
+					<View>
+						{/* <Overlay
 						fullScreen={false}
 						animationType='slide'
 						isVisible={visible}
 						transparent={true}
 						onBackdropPress={toggleOverlay}
 					> */}
-					<MyPostsList myPosts={myPosts} />
-					{/* </Overlay> */}
-				</View>
-			</Card>
-		</View>
+						<MyPostsList myPosts={myPosts} onDelete={deletePostItem} />
+						{/* </Overlay> */}
+					</View>
+				</Card>
+			</View>
+		</ScrollView>
 	);
 }
 
