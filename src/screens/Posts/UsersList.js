@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, FlatList } from 'react-native';
+import {
+	ActivityIndicator,
+	StyleSheet,
+	View,
+	Text,
+	FlatList,
+} from 'react-native';
 import * as db from '../../config/firebaseConfig';
 import { Icon, Avatar, Card, ListItem, Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
@@ -7,13 +13,15 @@ import colors from '../../styles/colors';
 
 export default function UsersList({ authorID }) {
 	const [userPosts, setUserPosts] = useState(null);
+	const [error, setError] = useState(null);
 	const navigation = useNavigation();
+
 	const getUserPosts = async () => {
 		try {
 			let result = await db.getUserList(authorID);
 			setUserPosts(result);
 		} catch (e) {
-			console.log(e);
+			setError(e);
 		}
 	};
 
@@ -21,9 +29,20 @@ export default function UsersList({ authorID }) {
 		getUserPosts();
 	}, []);
 
-	console.log(userPosts);
 	if (!userPosts) {
-		return <Text>Loading...</Text>;
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					flexDirection: 'row',
+					justifyContent: 'space-around',
+					padding: 10,
+				}}
+			>
+				<ActivityIndicator color='blue' size='large' />
+			</View>
+		);
 	}
 	return (
 		<View style={styles.view}>
@@ -58,16 +77,10 @@ const UserPostItem = ({
 	item,
 	title,
 	created,
-	description,
+
 	price,
-	category,
+
 	image,
-	postedBy,
-	altEmail,
-	email,
-	phoneNumber,
-	authorID,
-	userPhoto,
 }) => {
 	console.log(title);
 	let Date = created;
@@ -93,8 +106,6 @@ const UserPostItem = ({
 			wrapperStyle={{
 				flexDirection: 'row',
 				justifyContent: 'space-between',
-				// alignItems: 'center',
-
 				heigth: 75,
 				marginTop: 8,
 			}}
@@ -106,34 +117,32 @@ const UserPostItem = ({
 			/>
 
 			<View style={styles.column}>
-				<Card.Title style={styles.text}>
-					{title} ${price}
-				</Card.Title>
+				<Card.Title style={styles.text}>{title}</Card.Title>
+				<Card.Title style={styles.text}>${price}</Card.Title>
 				<Card.Divider />
 				<ListItem.Subtitle style={styles.date}>
-					{splicedDate[0]} {splicedDate[1]} {splicedDate[2]}at: {time} PST
+					{splicedDate[0]} {splicedDate[1]} {splicedDate[2]}
 				</ListItem.Subtitle>
+				<ListItem.Subtitle style={styles.date}>{time} PST</ListItem.Subtitle>
 			</View>
-			<Icon
-				type='material-community'
-				name='chevron-right'
-				size={16}
-				color='black'
-				onPress={goToDetails}
-				style={{ margin: 0, padding: 16 }}
-			/>
+			<View style={{ alignSelf: 'center' }}>
+				<Icon
+					type='material-community'
+					name='chevron-right'
+					size={16}
+					color='black'
+					onPress={goToDetails}
+				/>
+			</View>
 		</Card>
 	);
 };
 const styles = StyleSheet.create({
 	view: {
 		height: 450,
-
-		// alignItems: 'center',
-		// justifyContent: 'center',
-		// alignSelf: 'center',
 	},
 	text: {
+		fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
 		marginLeft: 16,
 		fontSize: 16,
 	},
@@ -145,12 +154,14 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		minWidth: 320,
 		maxWidth: '100%',
+		fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
 	},
 	image: {
 		width: 100,
-		height: 75,
-		padding: 16,
+		height: 100,
+
 		borderRadius: 4,
+		alignSelf: 'center',
 	},
 
 	column: {
@@ -160,9 +171,11 @@ const styles = StyleSheet.create({
 	},
 	posted: {
 		fontSize: 12,
+		fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
 	},
 	postBy: {
 		fontSize: 13,
+		fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
 	},
 	date: {
 		fontSize: 12,
@@ -171,5 +184,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		width: '100%',
 		height: 50,
+		fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
 	},
 });

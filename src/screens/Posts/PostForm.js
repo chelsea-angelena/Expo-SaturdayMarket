@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect, useContext } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { StyleSheet, View, Text } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
 import {
 	FormInput,
 	ErrorMessage,
@@ -12,56 +12,21 @@ import { CheckBox, Overlay, Icon, Card, Divider } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { AuthContext } from '../../Context/AuthContext';
-// import Modal from 'modal-react-native-web';
 import FormImagePicker from '../../Atoms/FormImagePicker';
 import * as db from '../../config/firebaseConfig';
-import useLocation from '../../hooks/useLocation';
-
-// import CategoryModal from './Categories';
+// import useLocation from '../../hooks/useLocation';
 import colors from '../../styles/colors';
 import Logo from '../../Atoms/Logo';
-// import UserMap from './UserMap';
+import UserMap from './UserMap';
 import { useNavigation } from '@react-navigation/native';
-// import Screen from '../../Atoms/Screen';
 
-// const validationSchema = Yup.object().shape({
-// 	title: Yup.string()
-// 		.min(2, 'Too Short!')
-// 		.max(50, 'Too Long!')
-// 		.required('Required'),
-// 	description: Yup.string()
-// 		.min(2, 'Too Short!')
-// 		.max(50, 'Too Long!')
-// 		.required('Required'),
-// 	price: Yup.number().required('Required'),
-// 	images: Yup.array().min(1).required('Required'),
-// 	categories: Yup.object().required,
-// });
-
-export default function PostForm() {
-	// const [visible, setVisible] = useState(false);
-	// const [category, setCategory] = useState('');
-	const [isSubmitting, setIsSubmitting] = useState(false);
+export default function PostForm({ location }) {
 	const [checked, setChecked] = useState(false);
-	const [location] = useLocation();
+	// const [location] = useLocation();
 	const navigation = useNavigation();
 	const [error, setError] = useState(null);
 	const [userData, setUserData] = useState({});
-
-	// const toggleOverlay = () => {
-	// 	setVisible(!visible);
-	// };
-
-	// const updateCategory = async () => {
-	// 	let result = await chooseCategory();
-	// 	setCategory(result);
-	// };
-
-	// const onCheckBox = () => {
-	// 	let location = useLocation();
-	// 	console.log(location, 'location');
-	// };
-
+	console.log(location, 'form location');
 	const user = useContext(AuthContext);
 	const userId = user.uid;
 
@@ -69,16 +34,15 @@ export default function PostForm() {
 		navigation.navigate('PostsStack', { screen: 'PostsListScreen' });
 	};
 
-	const submitPostForm = (values) => {
-		// let { displayName, email, photoURL } = userData;
-		const { latitude, longitude } = location;
-		try {
-			db.createPost(userId, userData, values, location);
-		} catch (error) {
-			setError(error);
-		}
-		goToPosts();
-	};
+	// const submitPostForm = (values) => {
+	// 	// const { latitude, longitude } = location;
+	// 	try {
+	// 		db.createPost(userId, userData, values, location);
+	// 	} catch (error) {
+	// 		setError(error);
+	// 	}
+	// 	goToPosts();
+	// };
 
 	const getUserData = async () => {
 		try {
@@ -95,49 +59,112 @@ export default function PostForm() {
 	}, []);
 
 	if (!userData) {
-		return <Text>Loading..</Text>;
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					flexDirection: 'row',
+					justifyContent: 'space-around',
+					padding: 10,
+				}}
+			>
+				<ActivityIndicator color='blue' size='large' />
+			</View>
+		);
 	}
 	if (!userId) {
-		return <Text>Loading....</Text>;
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					flexDirection: 'row',
+					justifyContent: 'space-around',
+					padding: 10,
+				}}
+			>
+				<ActivityIndicator color='blue' size='large' />
+			</View>
+		);
 	}
+	// if (!location.latitude) {
+	// 	return (
+	// 		<View
+	// 			style={{
+	// 				flex: 1,
+	// 				justifyContent: 'center',
+	// 				flexDirection: 'row',
+	// 				justifyContent: 'space-around',
+	// 				padding: 10,
+	// 			}}
+	// 		>
+	// 			<ActivityIndicator color='blue' size='large' />
+	// 		</View>
+	// 	);
+	// }
 	return (
 		<>
-			<Formik
-				initialValues={{
-					title: '',
-					description: '',
-					category: '',
-					price: '',
-					phoneNumber: '',
-					altEmail: '',
-					images: [],
-				}}
-				onSubmit={(values, { resetForm }) => {
-					submitPostForm(values);
-					resetForm({ values: '' });
-				}}
-				// validationSchema={validationSchema}
-			>
-				{({
-					handleChange,
-					resetForm,
-					values,
-					handleSubmit,
-					errors,
-					isValid,
-					touched,
-					handleBlur,
-					isSubmitting,
-				}) => (
-					<KeyboardAwareScrollView>
-						<View style={styles.container}>
-							<Card style={styles.wrapper}>
+			<KeyboardAwareScrollView>
+				<Formik
+					initialValues={{
+						title: '',
+						description: '',
+						category: '',
+						price: '',
+						phoneNumber: '',
+						altEmail: '',
+						images: [],
+					}}
+					onSubmit={(values, { resetForm }) => {
+						submitPostForm(values);
+						resetForm({ values: '' });
+					}}
+				>
+					{({
+						handleChange,
+						resetForm,
+						values,
+						handleSubmit,
+						errors,
+						isValid,
+						touched,
+						handleBlur,
+						isSubmitting,
+					}) => (
+						<>
+							<View
+								style={{
+									maxWidth: 300,
+									marginTop: 32,
+									alignSelf: 'center',
+									alignItems: 'center',
+								}}
+							>
 								<Logo />
+							</View>
+							<Card style={{ marginTop: 32 }}>
+								<Card.Title
+									style={{
+										fontSize: 32,
+										fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
+									}}
+								>
+									New Post
+								</Card.Title>
+								<Divider
+									style={{
+										padding: 0.5,
+										backgroundColor: colors.drab,
+									}}
+								/>
+
 								<FormImagePicker
 									style={styles.picker}
 									type='Blob'
 									name='images'
 								/>
+
 								<FormInput
 									name='title'
 									value={values.title}
@@ -190,13 +217,6 @@ export default function PostForm() {
 								<ErrorMessage
 									errorValue={touched.phoneNumber && errors.phoneNumber}
 								/>
-								{/* <AppText style={styles.text}>Choose a category</AppText>
-									<Icon
-										type='material-community'
-										name='chevron-down'
-										color={colors.onyx}
-										onPress={toggleOverlay}
-									/> */}
 								<FormInput
 									name='category'
 									value={values.category}
@@ -208,59 +228,32 @@ export default function PostForm() {
 								<ErrorMessage
 									errorValue={touched.category && errors.category}
 								/>
-								{/* <Overlay
-										overlayStyle={{ height: 350 }}
-										isVisible={visible}
-										onBackdropPress={toggleOverlay}
-										style={styles.overlay}
-										// ModalComponent={Modal}
-									>
-										<CategoryModal
-											toggleOverlay={toggleOverlay}
-											updateCategory={setCategory}
-										/>
-									</Overlay> */}
-								{/* <CheckBox
+
+								<CheckBox
 									title='Include a Map with your location?'
 									status={checked ? 'checked' : 'unchecked'}
 									onPress={() => setChecked(!checked)}
 									containerStyle={styles.box}
-								/> */}
-								{/* {checked ? <UserMap location={location} /> : null} */}
+								/>
+								{checked ? <UserMap location={location} /> : null}
 								<View style={styles.buttonContainer}>
 									<PostFormButton
 										buttonType='outline'
 										onPress={handleSubmit}
 										title='Submit Post'
 										buttonColor={colors.slate}
-										// disabled={!isValid || isSubmitting}
-										// loading={isSubmitting}
-										// disabledStyle={{
-										// 	backgroundColor: colors.primaryBlue,
-										// 	color: 'red',
-										// }}
 									/>
 									<ErrorMessage errorValue={errors.general} />
 								</View>
 							</Card>
-						</View>
-					</KeyboardAwareScrollView>
-				)}
-			</Formik>
+						</>
+					)}
+				</Formik>
+			</KeyboardAwareScrollView>
 		</>
 	);
 }
 const styles = StyleSheet.create({
-	view: {
-		alignItems: 'center',
-		width: 400,
-		alignSelf: 'center',
-	},
-	container: {
-		// flex: 1,
-		backgroundColor: '#fff',
-		marginTop: 24,
-	},
 	buttonContainer: {
 		margin: 25,
 	},

@@ -38,7 +38,19 @@ export default function SavedPosts() {
 	);
 
 	if (!userId && !savedList) {
-		return <ActivityIndicator size='large' color='blue' />;
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					flexDirection: 'row',
+					justifyContent: 'space-around',
+					padding: 10,
+				}}
+			>
+				<ActivityIndicator color='blue' size='large' />
+			</View>
+		);
 	}
 	return (
 		<Screen>

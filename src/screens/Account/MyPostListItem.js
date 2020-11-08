@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { FlatList, View, StyleSheet, Text, Image } from 'react-native';
+import {
+	ActivityIndicator,
+	FlatList,
+	View,
+	StyleSheet,
+	Text,
+	Image,
+} from 'react-native';
 import { Divider, Icon, Button, Card, ListItem } from 'react-native-elements';
 import colors from '../../styles/colors';
 import { useNavigation } from '@react-navigation/native';

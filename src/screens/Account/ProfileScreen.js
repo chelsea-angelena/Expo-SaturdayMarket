@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import * as db from '../../config/firebaseConfig';
-
 import {
 	Divider,
 	Overlay,
@@ -10,7 +9,6 @@ import {
 	Avatar,
 } from 'react-native-elements';
 import EditProfile from './EditProfile';
-
 import colors from '../../styles/colors';
 import { useNavigation } from '@react-navigation/native';
 import MyPostsList from './MyPostsList';
@@ -43,10 +41,6 @@ export default function ProfileScreen({
 			setError(e);
 		}
 	};
-	const logOut = async () => {
-		await db.signOut();
-		navigation.navigate('TabNavigator', { screen: 'AuthStack' });
-	};
 
 	const deletePostItem = async (postId) => {
 		try {
@@ -60,13 +54,21 @@ export default function ProfileScreen({
 		getMyPosts();
 	}, []);
 
-	// if (!userId) {
-	// 	return <Text>Loading....</Text>;
-	// }
-	// const onIconPress = async () => {
-	// 	!showEdit ? setShowEdit(true) : null;
-	// };
-
+	if (!userId) {
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					flexDirection: 'row',
+					justifyContent: 'space-around',
+					padding: 10,
+				}}
+			>
+				<ActivityIndicator color='blue' size='large' />
+			</View>
+		);
+	}
 	return (
 		<ScrollView>
 			<View style={styles.wrapper}>
@@ -101,7 +103,7 @@ export default function ProfileScreen({
 					<ListItem.Subtitle style={{ padding: 8, alignSelf: 'center' }}>
 						{email}
 					</ListItem.Subtitle>
-					
+
 					<View>
 						<Divider
 							style={{
@@ -111,25 +113,9 @@ export default function ProfileScreen({
 								backgroundColor: colors.drab,
 							}}
 						/>
-
-						{/* <Icon
-						type='material-community'
-						color='black'
-						size={32}
-						name='chevron-down'
-						onPress={toggleOverlay}
-					/> */}
 					</View>
 					<View>
-						{/* <Overlay
-						fullScreen={false}
-						animationType='slide'
-						isVisible={visible}
-						transparent={true}
-						onBackdropPress={toggleOverlay}
-					> */}
 						<MyPostsList myPosts={myPosts} onDelete={deletePostItem} />
-						{/* </Overlay> */}
 					</View>
 				</Card>
 			</View>

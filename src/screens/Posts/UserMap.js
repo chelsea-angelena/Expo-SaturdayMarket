@@ -3,6 +3,7 @@ import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 export default function Map({ location }) {
+	console.log(location.latitude.latitude, 'loca on map');
 	if (!location) {
 		return <ActivityIndicator size='large' />;
 	}

@@ -3,6 +3,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { PostsStack, AccountStack, SavedPostsStack } from './index';
 import PostForm from '../screens/Posts/PostForm';
+import NewPostStack from './NewPostStack';
 import LogOut from '../screens/Account/LogOut';
 import SavedPosts from '../screens/SavedPosts/SavedPosts';
 import colors from '../styles/colors';
@@ -43,7 +44,7 @@ export default function TabNavigator() {
 
 			<Tab.Screen
 				name='PostForm'
-				component={PostForm}
+				component={NewPostStack}
 				options={{
 					tabBarLabel: 'New Post',
 					tabBarIcon: ({ color }) => (

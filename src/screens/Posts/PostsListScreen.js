@@ -1,6 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../Context/AuthContext';
-import { ScrollView, StyleSheet, FlatList, View } from 'react-native';
+import {
+	ActivityIndicator,
+	ScrollView,
+	StyleSheet,
+	FlatList,
+	View,
+} from 'react-native';
 import * as db from '../../config/firebaseConfig';
 import PostListItem from './PostListItem';
 import Screen from '../../Atoms/Screen';
@@ -35,13 +41,21 @@ export default function PostsListScreen(props) {
 	if (error) {
 		return <Text>Error...</Text>;
 	}
-	if (!posts) {
-		return <Text>Loading...</Text>;
-	}
 	if (posts.length === 0) {
-		return <Text>No Lists....</Text>;
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					flexDirection: 'row',
+					justifyContent: 'space-around',
+					padding: 10,
+				}}
+			>
+				<ActivityIndicator color='blue' size='large' />
+			</View>
+		);
 	}
-
 	return (
 		<FlatList
 			keyExtractor={(posts) => posts.id}

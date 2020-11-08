@@ -22,7 +22,21 @@ export default function UserProfileScreen(props) {
 	useEffect(() => {
 		getUser();
 	}, []);
-
+	if (!userData) {
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					flexDirection: 'row',
+					justifyContent: 'space-around',
+					padding: 10,
+				}}
+			>
+				<ActivityIndicator color='blue' size='large' />
+			</View>
+		);
+	}
 	return (
 		<ScrollView>
 			<View style={styles.view}>

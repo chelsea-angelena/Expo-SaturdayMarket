@@ -1,13 +1,6 @@
-import React, {useContext } from 'react';
-import {
-	StyleSheet,
-	View,
-} from 'react-native';
-import {
-	Card,
-	ListItem,
-	Avatar,
-} from 'react-native-elements';
+import React, { useContext } from 'react';
+import { StyleSheet, View, ActivityIndicator} from 'react-native';
+import { Card, ListItem, Avatar } from 'react-native-elements';
 import { AuthContext } from '../../Context/AuthContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 

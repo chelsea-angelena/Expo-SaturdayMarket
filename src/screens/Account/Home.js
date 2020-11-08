@@ -32,14 +32,13 @@ export default function Home(props) {
 	const updateProfile = async (values, userId) => {
 		let { images, displayName } = values;
 		let { data } = images;
+		setLoading(true);
 		try {
 			await db.updateUserProfile(values, userId);
-			setLoading(true);
 		} catch (error) {
 			setError(error);
 		} finally {
 			getUserProfileData();
-			setLoading(false);
 		}
 	};
 	useEffect(() => {

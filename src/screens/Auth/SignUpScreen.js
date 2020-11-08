@@ -96,7 +96,7 @@ const SignUpScreen = () => {
 									placeholder='Enter your full name'
 									iconName='md-person'
 									iconColor='#2C384A'
-									style={{ color: colors.white }}
+									style={{ padding: 0, color: colors.white }}
 									onBlur={handleBlur('displayName')}
 								/>
 								<ErrorMessage errorValue={touched.name && errors.name} />
@@ -109,7 +109,7 @@ const SignUpScreen = () => {
 									iconName='ios-mail'
 									iconColor='#2C384A'
 									onBlur={handleBlur('email')}
-									style={{ color: colors.white }}
+									style={{ color: colors.white, padding: 0 }}
 								/>
 								<ErrorMessage errorValue={touched.email && errors.email} />
 								<FormInput
@@ -182,11 +182,11 @@ const styles = StyleSheet.create({
 		paddingBottom: 32,
 	},
 	logoContainer: {
-		marginBottom: 15,
 		alignItems: 'center',
 	},
 	buttonContainer: {
-		margin: 25,
+		marginLeft: 24,
+		marginRight: 24,
 	},
 	checkBoxContainer: {
 		backgroundColor: colors.white,

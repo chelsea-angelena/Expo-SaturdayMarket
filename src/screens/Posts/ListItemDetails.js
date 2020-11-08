@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Icon, Card, ListItem, Divider, Avatar } from 'react-native-elements';
 import colors from '../../styles/colors';
-// import UserMap from '../Posts/UserMap';
+import UserMap from '../Posts/UserMap';
 import * as db from '../../config/firebaseConfig';
 import { AuthContext } from '../../Context/AuthContext';
 import Text from '../../Atoms/AppText';
@@ -72,7 +72,19 @@ const ListItemDetails = ({ navigation, route }, props) => {
 	);
 
 	if (!userId) {
-		return <Text>Loading..</Text>;
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					flexDirection: 'row',
+					justifyContent: 'space-around',
+					padding: 10,
+				}}
+			>
+				<ActivityIndicator color='blue' size='large' />
+			</View>
+		);
 	}
 	return (
 		<ScrollView>
@@ -161,7 +173,7 @@ const ListItemDetails = ({ navigation, route }, props) => {
 							</TouchableOpacity>
 						</Card>
 					</View>
-					{/* <UserMap location={location} /> */}
+					<UserMap location={location} />
 				</Card>
 			</View>
 		</ScrollView>

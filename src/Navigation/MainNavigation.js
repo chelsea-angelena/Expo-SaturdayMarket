@@ -10,8 +10,7 @@ export default function MainNavigation() {
 	const user = useContext(AuthContext);
 	return (
 		<NavigationContainer>
-			{!user ? <AuthStack /> : <TabNavigator user={user} />}
+			{!user ? <AuthStack /> : <TabNavigator />}
 		</NavigationContainer>
 	);
 }
-
