@@ -113,3 +113,4 @@ web-build/
 GoogleService-Info.plist
 google-services.json
 # @end expo-cli
+app.config.js
