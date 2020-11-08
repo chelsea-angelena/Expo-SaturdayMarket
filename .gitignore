@@ -114,3 +114,4 @@ GoogleService-Info.plist
 google-services.json
 # @end expo-cli
 app.config.js
+googleInit.js
