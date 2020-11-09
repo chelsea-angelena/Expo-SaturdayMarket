@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Icon, Card, ListItem, Divider, Avatar } from 'react-native-elements';
 import colors from '../../styles/colors';
-import UserMap from '../Posts/UserMap';
+import UserMap from './DetailMap';
 import * as db from '../../config/firebaseConfig';
 import { AuthContext } from '../../Context/AuthContext';
 import Text from '../../Atoms/AppText';
@@ -18,6 +18,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const ListItemDetails = ({ navigation, route }, props) => {
 	let { item } = route.params;
+	console.log(item, 'item');
 	const [isSaved, setIsSaved] = useState(false);
 	const [savedList, setSavedList] = useState([]);
 	const [error, setError] = useState(null);

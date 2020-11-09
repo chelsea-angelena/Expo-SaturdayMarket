@@ -5,7 +5,6 @@ import { AuthContext } from '../../Context/AuthContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const SavedPostItem = ({ item, navigation }) => {
-	console.log(item, 'item');
 	const { authorID, post, created, userData, id } = item;
 	const { description, title, category, image, location, price } = post;
 	const { displayName, altEmail, email, phoneNumber, photoURL } = userData;

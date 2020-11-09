@@ -33,11 +33,14 @@ const SignInScreen = () => {
 
 	// const GoogleSignIn = async () => {
 	// 	try {
-	// 		await db.Goologin();
+	// 		let response = await db.Goologin();
+	// 		// const uid = response.user.uid;
+
 	// 	} catch (e) {
-	// 		setError('error');
+	// 		setError(e);
 	// 	}
 	// };
+
 	const handleLogin = async (values) => {
 		const { email, password } = values;
 		try {

@@ -5,12 +5,13 @@ import { ActivityIndicator, View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useAuth } from './src/hooks/useAuth';
 import { AuthContext } from './src/Context/AuthContext';
-
+import useLocation from './src/hooks/useLocation';
+import { LocationContext } from './src/Context/LocationContext';
 import MainNavigation from './src/Navigation/MainNavigation';
 
 export default function App() {
-	let [user, loading] = useAuth();
-
+	let [user] = useAuth();
+	let [location, loading] = useLocation();
 	if (loading) {
 		return (
 			<View
@@ -27,10 +28,12 @@ export default function App() {
 		);
 	}
 	return (
-		<AuthContext.Provider value={user}>
-			<ThemeProvider>
-				<MainNavigation />
-			</ThemeProvider>
-		</AuthContext.Provider>
+		<LocationContext.Provider value={location}>
+			<AuthContext.Provider value={user}>
+				<ThemeProvider>
+					<MainNavigation />
+				</ThemeProvider>
+			</AuthContext.Provider>
+		</LocationContext.Provider>
 	);
 }

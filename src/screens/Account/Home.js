@@ -22,6 +22,7 @@ export default function Home(props) {
 				setPhotoURL(result.photoURL);
 				setEmail(result.email);
 			});
+			return result;
 		} catch (e) {
 			setError(e);
 		} finally {
@@ -34,20 +35,19 @@ export default function Home(props) {
 		let { data } = images;
 		setLoading(true);
 		try {
-			await db.updateUserProfile(values, userId);
+			let result = await db.updateUserProfile(values, userId);
+			getUserProfileData();
+			return result;
 		} catch (error) {
 			setError(error);
 		} finally {
-			getUserProfileData();
+			// getUserProfileData();
 		}
 	};
 	useEffect(() => {
 		getUserProfileData();
 	}, []);
 
-	const signOut = async () => {
-		await db.signOut();
-	};
 	if (loading) {
 		return <ActivityIndicator size='large' color='blue' />;
 	}
@@ -59,7 +59,6 @@ export default function Home(props) {
 				displayName={displayName}
 				photoURL={photoURL}
 				email={email}
-				signOut={signOut}
 			/>
 		</ScrollView>
 	);

@@ -11,7 +11,7 @@ import * as db from '../../config/firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 
 export default function EditProfile({ onUpdate, onToggleOverlay }, props) {
-	const [submitting, setSubmitting] = useState(false);
+	// const [submitting, setSubmitting] = useState(false);
 	const user = useContext(AuthContext);
 	const userId = user.uid;
 	const navigation = useNavigation();
@@ -24,10 +24,9 @@ export default function EditProfile({ onUpdate, onToggleOverlay }, props) {
 					images: [],
 				}}
 				onSubmit={(values, { resetForm }) => {
-					console.log(values, 'values');
 					onUpdate(values, userId);
 					onToggleOverlay();
-					resetForm({ values: '' });
+					// resetForm({ values: '' });
 				}}
 			>
 				{({

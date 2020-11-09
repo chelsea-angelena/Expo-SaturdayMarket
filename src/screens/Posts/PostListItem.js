@@ -1,7 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, View, StyleSheet, Platform } from 'react-native';
-import { Avatar, ListItem, Card, Icon, Image } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
+import { Avatar, ListItem, Card, Icon, Image } from 'react-native-elements';import { useNavigation } from '@react-navigation/native';
 
 const PostListItem = ({ item }) => {
 	const { authorID, post, created, userData, id } = item;

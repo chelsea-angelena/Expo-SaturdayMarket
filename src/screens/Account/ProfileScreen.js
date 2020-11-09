@@ -13,7 +13,7 @@ import colors from '../../styles/colors';
 import { useNavigation } from '@react-navigation/native';
 import MyPostsList from './MyPostsList';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
+import { useFocusEffect } from '@react-navigation/native';
 export default function ProfileScreen({
 	onUpdate,
 	displayName,
@@ -50,9 +50,12 @@ export default function ProfileScreen({
 		}
 		getMyPosts();
 	};
-	useEffect(() => {
-		getMyPosts();
-	}, []);
+	useFocusEffect(
+		React.useCallback(() => {
+			getMyPosts();
+			return undefined;
+		}, [])
+	);
 
 	if (!userId) {
 		return (

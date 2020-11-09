@@ -45,7 +45,6 @@ const SignUpScreen = () => {
 		const { email, password, displayName } = values;
 		try {
 			const response = await db.signupWithEmail(email, password);
-			console.log(response);
 			await db.createNewUser({
 				email: response.user.email,
 				uid: response.user.uid,

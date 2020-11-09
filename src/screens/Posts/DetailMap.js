@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-export default function Map({ location }) {
-	const {
-		coords: { latitude, longitude },
-	} = location;
+export default function DetailMap({ location }) {
+	const { latitude, longitude } = location;
 	if (!location) {
 		return <ActivityIndicator size='large' />;
 	}

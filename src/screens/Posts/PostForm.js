@@ -1,7 +1,13 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect, useContext } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
+import {
+	ActivityIndicator,
+	StyleSheet,
+	View,
+	Text,
+	Platform,
+} from 'react-native';
 import {
 	FormInput,
 	ErrorMessage,
@@ -14,95 +20,51 @@ import * as Yup from 'yup';
 import { AuthContext } from '../../Context/AuthContext';
 import FormImagePicker from '../../Atoms/FormImagePicker';
 import * as db from '../../config/firebaseConfig';
-// import useLocation from '../../hooks/useLocation';
+import useLocation from '../../hooks/useLocation';
 import colors from '../../styles/colors';
 import Logo from '../../Atoms/Logo';
 import UserMap from './UserMap';
 import { useNavigation } from '@react-navigation/native';
-
-export default function PostForm({ location }) {
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+import { LocationContext } from '../../Context/LocationContext';
+export default function PostForm() {
 	const [checked, setChecked] = useState(false);
-	// const [location] = useLocation();
+	const location = useContext(LocationContext);
 	const navigation = useNavigation();
 	const [error, setError] = useState(null);
 	const [userData, setUserData] = useState({});
-	console.log(location, 'form location');
 	const user = useContext(AuthContext);
 	const userId = user.uid;
-
 	const goToPosts = async () => {
 		navigation.navigate('PostsStack', { screen: 'PostsListScreen' });
 	};
 
-	// const submitPostForm = (values) => {
-	// 	// const { latitude, longitude } = location;
-	// 	try {
-	// 		db.createPost(userId, userData, values, location);
-	// 	} catch (error) {
-	// 		setError(error);
-	// 	}
-	// 	goToPosts();
-	// };
-
-	const getUserData = async () => {
+	const submitPostForm = (values) => {
+		const {
+			coords: { latitude, longitude },
+		} = location;
 		try {
-			let result = await db.getDoc(userId);
-			let data = result[0];
-			setUserData(data);
-		} catch (e) {
-			setError(e);
+			db.createPost(userId, userData, values, latitude, longitude);
+		} catch (error) {
+			setError(error);
 		}
+		goToPosts();
 	};
 
 	useEffect(() => {
+		const getUserData = async () => {
+			try {
+				let result = await db.getDoc(userId);
+				let data = result[0];
+				setUserData(data);
+			} catch (e) {
+				setError(e);
+			}
+		};
 		getUserData();
 	}, []);
 
-	if (!userData) {
-		return (
-			<View
-				style={{
-					flex: 1,
-					justifyContent: 'center',
-					flexDirection: 'row',
-					justifyContent: 'space-around',
-					padding: 10,
-				}}
-			>
-				<ActivityIndicator color='blue' size='large' />
-			</View>
-		);
-	}
-	if (!userId) {
-		return (
-			<View
-				style={{
-					flex: 1,
-					justifyContent: 'center',
-					flexDirection: 'row',
-					justifyContent: 'space-around',
-					padding: 10,
-				}}
-			>
-				<ActivityIndicator color='blue' size='large' />
-			</View>
-		);
-	}
-	// if (!location.latitude) {
-	// 	return (
-	// 		<View
-	// 			style={{
-	// 				flex: 1,
-	// 				justifyContent: 'center',
-	// 				flexDirection: 'row',
-	// 				justifyContent: 'space-around',
-	// 				padding: 10,
-	// 			}}
-	// 		>
-	// 			<ActivityIndicator color='blue' size='large' />
-	// 		</View>
-	// 	);
-	// }
 	return (
 		<>
 			<KeyboardAwareScrollView>
@@ -235,7 +197,9 @@ export default function PostForm({ location }) {
 									onPress={() => setChecked(!checked)}
 									containerStyle={styles.box}
 								/>
-								{checked ? <UserMap location={location} /> : null}
+								{/* {checked ? <UserMap location={location} /> : null} */}
+
+								<UserMap location={location} />
 								<View style={styles.buttonContainer}>
 									<PostFormButton
 										buttonType='outline'

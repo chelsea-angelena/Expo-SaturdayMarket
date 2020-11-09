@@ -1,35 +1,27 @@
-import React, { useEffect, useState } from 'react';
+// import React, { useEffect, useState } from 'react';
+// import { Text } from 'react-native';
+// import * as Location from 'expo-location';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
 
 export default function useLocation() {
+	const [location, setLocation] = useState(null);
 	const [loading, setLoading] = useState(true);
-	let [location, setLocation] = useState({
-		coords: { latitude: '', longitude: '' },
-	});
-
-	let [error, setError] = useState(null);
+	const [errorMsg, setErrorMsg] = useState(null);
 
 	useEffect(() => {
-		const getLocation = async () => {
-			try {
-				let { status } = await Location.requestPermissionsAsync();
-				if (status !== 'granted') {
-					setError(error, 'error');
-				}
-				let location = await Location.getCurrentPositionAsync({});
-				setLocation({
-					longitude: location.coords.longitude,
-					latitude: location.coords.latitude,
-				});
-			} catch (error) {
-				setError(error, 'error');
-			} finally {
-				setLoading(false);
+		(async () => {
+			let { status } = await Location.requestPermissionsAsync();
+			if (status !== 'granted') {
+				setErrorMsg('Permission to access location was denied');
 			}
-		};
-		getLocation();
-	}, []);
 
-	return [location, loading, error];
+			let location = await Location.getCurrentPositionAsync({});
+			setLocation(location);
+			setLoading(false);
+		})();
+	}, []);
+	return [location, loading];
 }
+
