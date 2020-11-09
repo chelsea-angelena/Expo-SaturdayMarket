@@ -7,11 +7,13 @@ import {
 	View,
 	Text,
 	Platform,
+	Alert,
 } from 'react-native';
 import {
-	FormInput,
+	// FormInput,
 	ErrorMessage,
 } from '../../screens/Account/ProfileFormComponents';
+import FormInput from '../../screens/Auth/PostFormInput';
 import PostFormButton from './PostFormButton';
 import AppText from '../../Atoms/Text';
 import { CheckBox, Overlay, Icon, Card, Divider } from 'react-native-elements';
@@ -25,11 +27,9 @@ import colors from '../../styles/colors';
 import Logo from '../../Atoms/Logo';
 import UserMap from './UserMap';
 import { useNavigation } from '@react-navigation/native';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
 import { LocationContext } from '../../Context/LocationContext';
+
 export default function PostForm() {
-	const [checked, setChecked] = useState(false);
 	const location = useContext(LocationContext);
 	const navigation = useNavigation();
 	const [error, setError] = useState(null);
@@ -64,7 +64,9 @@ export default function PostForm() {
 		};
 		getUserData();
 	}, []);
-
+	if (!userData) {
+		Alert.alert('Please complete your profile');
+	}
 	return (
 		<>
 			<KeyboardAwareScrollView>
@@ -132,7 +134,7 @@ export default function PostForm() {
 									value={values.title}
 									onChangeText={handleChange('title')}
 									placeholder='Enter a Title'
-									autoCapitalize='none'
+									autoCapitalize='words'
 									onBlur={handleBlur('title')}
 								/>
 								<ErrorMessage errorValue={touched.title && errors.title} />
@@ -150,6 +152,9 @@ export default function PostForm() {
 								<FormInput
 									name='price'
 									value={values.price}
+									iconName='ios-cash'
+									iconColor='#2C384A'
+									keyboardType='numeric'
 									onChangeText={handleChange('price')}
 									placeholder='$ 0.00    (enter price)'
 									onBlur={handleBlur('price')}
@@ -162,6 +167,7 @@ export default function PostForm() {
 									placeholder='(optional alt contact)'
 									iconName='ios-mail'
 									iconColor='#2C384A'
+									keyboardType='email'
 									onBlur={handleBlur('altEmail')}
 								/>
 								<ErrorMessage
@@ -174,6 +180,7 @@ export default function PostForm() {
 									placeholder='(optional alt contact)'
 									iconName='ios-call'
 									iconColor='#2C384A'
+									keyboardType='numeric'
 									onBlur={handleBlur('phoneNumber')}
 								/>
 								<ErrorMessage
@@ -190,15 +197,6 @@ export default function PostForm() {
 								<ErrorMessage
 									errorValue={touched.category && errors.category}
 								/>
-
-								<CheckBox
-									title='Include a Map with your location?'
-									status={checked ? 'checked' : 'unchecked'}
-									onPress={() => setChecked(!checked)}
-									containerStyle={styles.box}
-								/>
-								{/* {checked ? <UserMap location={location} /> : null} */}
-
 								<UserMap location={location} />
 								<View style={styles.buttonContainer}>
 									<PostFormButton

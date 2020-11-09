@@ -1,6 +1,14 @@
 import 'react-native-gesture-handler';
 import React, { useState } from 'react';
-import { Alert, Platform, StyleSheet, View, Dimensions } from 'react-native';
+import {
+	Alert,
+	KeyboardAvoidingView,
+	ScrollView,
+	Platform,
+	StyleSheet,
+	View,
+	Dimensions,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Text from '../../Atoms/AppText';
 import { Formik } from 'formik';
@@ -51,67 +59,71 @@ const SignInScreen = () => {
 	};
 	return (
 		<Screen>
-			<KeyboardAwareScrollView>
-				<Logo />
-				<View style={styles.container}>
-					<Formik
-						initialValues={{ email: '', password: '' }}
-						onSubmit={(values) => {
-							handleLogin(values);
-						}}
-						validationSchema={validationSchema}
-					>
-						{({
-							handleChange,
-							values,
-							handleSubmit,
-							errors,
-							isValid,
-							touched,
-							handleBlur,
-						}) => (
-							<>
-								<FormInput
-									name='email'
-									value={values.email}
-									onChangeText={handleChange('email')}
-									placeholder='Enter email'
-									autoCapitalize='none'
-									iconName='ios-mail'
-									iconColor='#2C384A'
-									style={{ color: colors.white }}
-									onBlur={handleBlur('email')}
-								/>
-								<ErrorMessage errorValue={touched.email && errors.email} />
-								<FormInput
-									name='password'
-									style={{ color: colors.white }}
-									value={values.password}
-									onChangeText={handleChange('password')}
-									placeholder='Enter password'
-									secureTextEntry
-									iconName='ios-lock'
-									iconColor='#2C384A'
-									onBlur={handleBlur('password')}
-								/>
-								<ErrorMessage
-									errorValue={touched.password && errors.password}
-								/>
-								<View style={styles.buttonContainer}>
-									<FormButton
-										buttonType='outline'
-										onPress={handleSubmit}
-										title='LOGIN'
-										buttonColor={colors.ochre}
-										disabled={!isValid}
+			<ScrollView>
+				<KeyboardAvoidingView>
+					<Logo />
+					<View style={styles.container}>
+						<Formik
+							initialValues={{ email: '', password: '' }}
+							onSubmit={(values) => {
+								handleLogin(values);
+							}}
+							validationSchema={validationSchema}
+						>
+							{({
+								handleChange,
+								values,
+								handleSubmit,
+								errors,
+								isValid,
+								touched,
+								handleBlur,
+							}) => (
+								<>
+									<FormInput
+										name='email'
+										value={values.email}
+										onChangeText={handleChange('email')}
+										placeholder='Enter email'
+										autoCapitalize='none'
+										iconName='ios-mail'
+										iconColor='#2C384A'
+										style={{ color: colors.white }}
+										onBlur={handleBlur('email')}
 									/>
-								</View>
-								<ErrorMessage errorValue={errors.general} />
-							</>
-						)}
-					</Formik>
-					{error ? Alert.alert('Please try Sign In again, or, Sign Up') : null}
-					{/* <Button
+									<ErrorMessage errorValue={touched.email && errors.email} />
+									<FormInput
+										name='password'
+										style={{ color: colors.white }}
+										value={values.password}
+										onChangeText={handleChange('password')}
+										placeholder='Enter password'
+										secureTextEntry
+										iconName='ios-lock'
+										iconColor='#2C384A'
+										onBlur={handleBlur('password')}
+									/>
+									<ErrorMessage
+										errorValue={touched.password && errors.password}
+									/>
+
+									<View style={styles.buttonContainer}>
+										<FormButton
+											buttonType='outline'
+											onPress={handleSubmit}
+											title='LOGIN'
+											buttonColor={colors.ochre}
+											disabled={!isValid}
+										/>
+									</View>
+									<ErrorMessage errorValue={errors.general} />
+								</>
+							)}
+						</Formik>
+						{error
+							? Alert.alert('Please try Sign In again, or, Sign Up')
+							: null}
+						{/* <Button
 						icon={
 							<Icon
 								name='google'
@@ -126,18 +138,19 @@ const SignInScreen = () => {
 						onPress={GoogleSignIn}
 						style={{ borderRadius: 40, margin: 24 }}
 					/> */}
-					<Text style={{ alignSelf: 'center' }}>Don't Have an account? </Text>
-					<Button
-						title='Sign up here'
-						type='clear'
-						// backgroundColor='none'
-						onPress={goToSignUp}
-						titleStyle={{
-							color: colors.ochre,
-						}}
-					/>
-				</View>
-			</KeyboardAwareScrollView>
+						<Text style={{ alignSelf: 'center' }}>Don't Have an account? </Text>
+						<Button
+							title='Sign up here'
+							type='clear'
+							// backgroundColor='none'
+							onPress={goToSignUp}
+							titleStyle={{
+								color: colors.ochre,
+							}}
+						/>
+					</View>
+				</KeyboardAvoidingView>
+			</ScrollView>
 		</Screen>
 	);
 };
