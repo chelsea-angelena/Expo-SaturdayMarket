@@ -7,9 +7,7 @@ import {
 	Platform,
 	StyleSheet,
 	View,
-	Dimensions,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Text from '../../Atoms/AppText';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -142,7 +140,6 @@ const SignInScreen = () => {
 						<Button
 							title='Sign up here'
 							type='clear'
-							// backgroundColor='none'
 							onPress={goToSignUp}
 							titleStyle={{
 								color: colors.ochre,

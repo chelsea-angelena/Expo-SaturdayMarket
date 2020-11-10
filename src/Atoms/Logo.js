@@ -1,10 +1,9 @@
 import React from 'react';
-import { Alert, Image, StyleSheet, View, Text } from 'react-native';
-import { Headline, Subheading } from 'react-native-paper';
+import { Image, StyleSheet, View } from 'react-native';
 import colors from '../styles/colors';
-import { useFonts } from 'expo-font';
 
-const Logo = ({ title, subtitle }) => {
+
+const Logo = () => {
 	return (
 		<View style={styles.view}>
 			<Image

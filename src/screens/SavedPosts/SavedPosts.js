@@ -56,8 +56,8 @@ export default function SavedPosts() {
 		<Screen>
 			<View style={styles.container}>
 				<FlatList
-					keyExtractor={(savedList) => savedList.id}
 					data={savedList}
+					keyExtractor={(savedList) => savedList.id}
 					renderItem={({ item }) => {
 						return <SavedPostItem item={item} navigation={navigation} />;
 					}}

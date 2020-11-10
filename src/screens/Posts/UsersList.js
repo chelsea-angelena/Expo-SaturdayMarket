@@ -4,18 +4,17 @@ import {
 	ActivityIndicator,
 	StyleSheet,
 	View,
-	Text,
 	FlatList,
 } from 'react-native';
 import * as db from '../../config/firebaseConfig';
-import { Icon, Avatar, Card, ListItem, Button } from 'react-native-elements';
+import { Icon, Card, ListItem } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import colors from '../../styles/colors';
 
 export default function UsersList({ authorID }) {
 	const [userPosts, setUserPosts] = useState(null);
 	const [error, setError] = useState(null);
-	const navigation = useNavigation();
+
 
 	const getUserPosts = async () => {
 		try {
@@ -78,12 +77,9 @@ const UserPostItem = ({
 	item,
 	title,
 	created,
-
 	price,
-
 	image,
 }) => {
-	console.log(title);
 	let Date = created;
 	let dateArr = Date.toString().split(' ');
 	let splicedDate = dateArr.splice(0, 4);
@@ -167,7 +163,6 @@ const styles = StyleSheet.create({
 
 	column: {
 		flexDirection: 'column',
-		// width: 200,
 		alignItems: 'center',
 	},
 	posted: {

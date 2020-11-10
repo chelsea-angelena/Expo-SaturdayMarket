@@ -1,6 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { AuthContext } from '../Context/AuthContext';
 import SavedPostItem from '../screens/SavedPosts/SavedPostItem';
 import {
 	PostsListScreen,
@@ -11,11 +10,9 @@ import {
 
 const Stack = createStackNavigator();
 
-const PostsStack = ({ navigation }) => {
-	const user = useContext(AuthContext);
-	console.log(user);
+const PostsStack = () => {
 	return (
-		<Stack.Navigator>
+		<Stack.Navigator screenOptions={{ headerShown: false }}>
 			<Stack.Screen
 				name='PostsListScreen'
 				component={PostsListScreen}

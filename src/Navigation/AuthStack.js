@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SignInScreen, SignUpScreen } from '../screens/Auth';
 const Stack = createStackNavigator();

@@ -1,20 +1,15 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-// import { Button, Input } from 'react-native-elements';
 import { StyleSheet, Text, View } from 'react-native';
 import { FormInput, ErrorMessage, FormButton } from './ProfileFormComponents';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import { AuthContext } from '../../Context/AuthContext';
 import FormImagePicker from '../../Atoms/FormImagePicker';
-import * as db from '../../config/firebaseConfig';
-import { useNavigation } from '@react-navigation/native';
 
 export default function EditProfile({ onUpdate, onToggleOverlay }, props) {
-	// const [submitting, setSubmitting] = useState(false);
 	const user = useContext(AuthContext);
 	const userId = user.uid;
-	const navigation = useNavigation();
+
 
 	return (
 		<View style={styles.container}>
@@ -26,7 +21,6 @@ export default function EditProfile({ onUpdate, onToggleOverlay }, props) {
 				onSubmit={(values, { resetForm }) => {
 					onUpdate(values, userId);
 					onToggleOverlay();
-					// resetForm({ values: '' });
 				}}
 			>
 				{({
@@ -34,10 +28,8 @@ export default function EditProfile({ onUpdate, onToggleOverlay }, props) {
 					values,
 					handleSubmit,
 					errors,
-					isValid,
 					touched,
 					handleBlur,
-					isSubmitting,
 				}) => (
 					<KeyboardAwareScrollView>
 						<View style={styles.view}>
@@ -65,8 +57,6 @@ export default function EditProfile({ onUpdate, onToggleOverlay }, props) {
 									onPress={handleSubmit}
 									title='Update Profile'
 									buttonColor='#039BE5'
-									// disabled={!isValid || isSubmitting}
-									// loading={isSubmitting}
 								/>
 							</View>
 							<ErrorMessage errorValue={errors.general} />
@@ -78,10 +68,6 @@ export default function EditProfile({ onUpdate, onToggleOverlay }, props) {
 	);
 }
 const styles = StyleSheet.create({
-	// logoContainer: {
-	// 	marginBottom: 15,
-	// 	alignItems: 'center',
-	// },
 	container: {
 		maxHeight: 400,
 	},

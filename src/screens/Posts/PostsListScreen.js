@@ -1,28 +1,17 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { AuthContext } from '../../Context/AuthContext';
-import {
-	ActivityIndicator,
-	ScrollView,
-	StyleSheet,
-	FlatList,
-	View,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ActivityIndicator, FlatList, View } from 'react-native';
 import * as db from '../../config/firebaseConfig';
 import PostListItem from './PostListItem';
-import Screen from '../../Atoms/Screen';
-import Text from '../../Atoms/AppText';
+
 export default function PostsListScreen(props) {
 	const [posts, setPosts] = useState([]);
-
-	const user = useContext(AuthContext);
-	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		return db.postsRef.onSnapshot((querySnapshot) => {
 			const newPosts = [];
 			querySnapshot.forEach((doc) => {
-				const { authorID, post, created, id, userData } = doc.data();
+				const { authorID, post, created, userData } = doc.data();
 				newPosts.push({
 					id: doc.id,
 					post,
@@ -38,9 +27,6 @@ export default function PostsListScreen(props) {
 		});
 	}, []);
 
-	if (error) {
-		return <Text>Error...</Text>;
-	}
 	if (posts.length === 0) {
 		return (
 			<View

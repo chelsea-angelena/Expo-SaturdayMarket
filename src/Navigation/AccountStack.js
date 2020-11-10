@@ -1,13 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Home, ProfileScreen, EditProfile } from '../screens/Account';
 import ListItemDetails from '../screens/Posts/ListItemDetails';
 import UserProfileScreen from '../screens/Posts/UserProfileScreen';
 const Stack = createStackNavigator();
 
-const AccountStack = ({ navigation }) => {
+const AccountStack = () => {
 	return (
-		<Stack.Navigator>
+		<Stack.Navigator screenOptions={{ headerShown: false }}>
 			<Stack.Screen
 				name='Home'
 				component={Home}
@@ -38,13 +38,3 @@ const AccountStack = ({ navigation }) => {
 };
 
 export default AccountStack;
-
-// const routes = {
-// 	EDIT_PROFILE: 'EditProfile',
-// 	HOME: 'Home',
-//NEW_POST: 'PostForm',
-//PROFILE_OF_USER: 'ProfileScreen',
-//POSTS_LIST: 'PostsListScreen'
-//POST_LIST_ITEM: 'PostListItem',
-//LIST_ITEM_DETAIL: 'ListItemDetail'
-// };

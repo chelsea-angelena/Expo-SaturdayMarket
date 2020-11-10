@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
+import React, { useContext } from 'react';
+import { StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { LocationContext } from '../../Context/LocationContext';
 
-export default function Map({ location }) {
+export default function Map() {
+	const location = useContext(LocationContext);
 	const {
 		coords: { latitude, longitude },
 	} = location;
-	if (!location) {
-		return <ActivityIndicator size='large' />;
-	}
+
 	return (
 		<MapView
 			loadingEnabled={true}

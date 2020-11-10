@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, ActivityIndicator} from 'react-native';
+import { StyleSheet, View} from 'react-native';
 import { Card, ListItem, Avatar } from 'react-native-elements';
 import { AuthContext } from '../../Context/AuthContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 const SavedPostItem = ({ item, navigation }) => {
 	const { authorID, post, created, userData, id } = item;
 	const { description, title, category, image, location, price } = post;
-	const { displayName, altEmail, email, phoneNumber, photoURL } = userData;
+
 
 	const goToDetails = async () => {
 		await navigation.navigate('ListItemDetails', { item });

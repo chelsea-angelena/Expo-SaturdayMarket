@@ -1,33 +1,20 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect, useContext } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import {
-	ActivityIndicator,
-	StyleSheet,
-	View,
-	Text,
-	Platform,
-	Alert,
-} from 'react-native';
-import {
-	// FormInput,
-	ErrorMessage,
-} from '../../screens/Account/ProfileFormComponents';
+import { ActivityIndicator, StyleSheet, View, Platform } from 'react-native';
+import { ErrorMessage } from '../../screens/Account/ProfileFormComponents';
 import FormInput from '../../screens/Auth/PostFormInput';
 import PostFormButton from './PostFormButton';
-import AppText from '../../Atoms/Text';
-import { CheckBox, Overlay, Icon, Card, Divider } from 'react-native-elements';
+import { Card, Divider } from 'react-native-elements';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import { AuthContext } from '../../Context/AuthContext';
 import FormImagePicker from '../../Atoms/FormImagePicker';
 import * as db from '../../config/firebaseConfig';
-import useLocation from '../../hooks/useLocation';
+import { LocationContext } from '../../Context/LocationContext';
 import colors from '../../styles/colors';
 import Logo from '../../Atoms/Logo';
 import UserMap from './UserMap';
 import { useNavigation } from '@react-navigation/native';
-import { LocationContext } from '../../Context/LocationContext';
 
 export default function PostForm() {
 	const location = useContext(LocationContext);
@@ -36,6 +23,7 @@ export default function PostForm() {
 	const [userData, setUserData] = useState({});
 	const user = useContext(AuthContext);
 	const userId = user.uid;
+
 	const goToPosts = async () => {
 		navigation.navigate('PostsStack', { screen: 'PostsListScreen' });
 	};
@@ -65,8 +53,21 @@ export default function PostForm() {
 		getUserData();
 	}, []);
 	if (!userData) {
-		Alert.alert('Please complete your profile');
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					flexDirection: 'row',
+					justifyContent: 'space-around',
+					padding: 10,
+				}}
+			>
+				<ActivityIndicator color='blue' size='large' />
+			</View>
+		);
 	}
+
 	return (
 		<>
 			<KeyboardAwareScrollView>
@@ -87,14 +88,13 @@ export default function PostForm() {
 				>
 					{({
 						handleChange,
-						resetForm,
+
 						values,
 						handleSubmit,
 						errors,
-						isValid,
+
 						touched,
 						handleBlur,
-						isSubmitting,
 					}) => (
 						<>
 							<View
@@ -156,7 +156,8 @@ export default function PostForm() {
 									iconColor='#2C384A'
 									keyboardType='numeric'
 									onChangeText={handleChange('price')}
-									placeholder='$ 0.00    (enter price)'
+									label='price'
+									placeholder='$ 0.00'
 									onBlur={handleBlur('price')}
 								/>
 								<ErrorMessage errorValue={touched.price && errors.price} />
@@ -167,7 +168,6 @@ export default function PostForm() {
 									placeholder='(optional alt contact)'
 									iconName='ios-mail'
 									iconColor='#2C384A'
-									keyboardType='email'
 									onBlur={handleBlur('altEmail')}
 								/>
 								<ErrorMessage
@@ -197,7 +197,7 @@ export default function PostForm() {
 								<ErrorMessage
 									errorValue={touched.category && errors.category}
 								/>
-								<UserMap location={location} />
+								<UserMap />
 								<View style={styles.buttonContainer}>
 									<PostFormButton
 										buttonType='outline'

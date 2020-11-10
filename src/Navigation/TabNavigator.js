@@ -1,9 +1,9 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { PostsStack, AccountStack, SavedPostsStack } from './index';
-import PostForm from '../screens/Posts/PostForm';
+import PostsStack from './PostsStack';
 import NewPostStack from './NewPostStack';
+import AccountStack from './AccountStack'
 import LogOut from '../screens/Account/LogOut';
 import SavedPosts from '../screens/SavedPosts/SavedPosts';
 import colors from '../styles/colors';

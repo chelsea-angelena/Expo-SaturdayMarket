@@ -1,11 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState} from 'react';
 import {
-	ActivityIndicator,
-	FlatList,
 	View,
 	StyleSheet,
-	Text,
-	Image,
 } from 'react-native';
 import { Divider, Icon, Button, Card, ListItem } from 'react-native-elements';
 import colors from '../../styles/colors';
@@ -15,7 +11,6 @@ const MyPostListItem = ({ item, onDeleteItem }) => {
 	const { created, post, userData } = item;
 	const { category, title, price, description, image, location } = post;
 	const [isDisabled, setIsDisabled] = useState(false);
-	const [error, setError] = useState(null);
 	let postId = item.id;
 
 	let Date = created.toDate();

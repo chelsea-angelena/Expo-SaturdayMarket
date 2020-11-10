@@ -2,7 +2,6 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { ThemeProvider } from 'react-native-elements';
 import { ActivityIndicator, View } from 'react-native';
-import * as SplashScreen from 'expo-splash-screen';
 import { useAuth } from './src/hooks/useAuth';
 import { AuthContext } from './src/Context/AuthContext';
 import useLocation from './src/hooks/useLocation';
@@ -10,8 +9,9 @@ import { LocationContext } from './src/Context/LocationContext';
 import MainNavigation from './src/Navigation/MainNavigation';
 
 export default function App() {
-	let [user] = useAuth();
-	let [location, loading] = useLocation();
+	let [user, loading] = useAuth();
+	let [location] = useLocation();
+
 	if (loading) {
 		return (
 			<View

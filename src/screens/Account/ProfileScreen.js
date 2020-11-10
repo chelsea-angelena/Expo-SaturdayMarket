@@ -13,7 +13,6 @@ import colors from '../../styles/colors';
 import { useNavigation } from '@react-navigation/native';
 import MyPostsList from './MyPostsList';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
 export default function ProfileScreen({
 	onUpdate,
 	displayName,
@@ -35,7 +34,7 @@ export default function ProfileScreen({
 			if (result.length >= 1) {
 				setMyPosts(result);
 			} else {
-				null;
+				return null;
 			}
 		} catch (e) {
 			setError(e);
@@ -44,19 +43,16 @@ export default function ProfileScreen({
 
 	const deletePostItem = async (postId) => {
 		try {
-			await db.deletePost(postId);
+			let result = await db.deletePost(postId);
+			return result;
 		} catch (e) {
 			setError(e);
 		}
 		getMyPosts();
 	};
-	useFocusEffect(
-		React.useCallback(() => {
-			getMyPosts();
-			return undefined;
-		}, [])
-	);
-
+	useEffect(() => {
+		getMyPosts();
+	}, []);
 	if (!userId) {
 		return (
 			<View
@@ -129,7 +125,6 @@ export default function ProfileScreen({
 const styles = StyleSheet.create({
 	image: {
 		width: 200,
-		// height: 200,
 	},
 	wrapper: {
 		width: '100%',

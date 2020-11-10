@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React, { useContext, useState, useEffect } from 'react';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
 import * as db from '../../config/firebaseConfig';
@@ -84,7 +84,6 @@ const SignUpScreen = () => {
 						touched,
 						handleBlur,
 						isSubmitting,
-						setFieldValue,
 					}) => (
 						<>
 							<View style={styles.innerView}>

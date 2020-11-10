@@ -3,6 +3,7 @@ import * as db from '../../config/firebaseConfig.js';
 import { AuthContext } from '../../Context/AuthContext';
 import { ScrollView, ActivityIndicator } from 'react-native';
 import ProfileScreen from './ProfileScreen';
+import { View } from 'react-native';
 
 export default function Home(props) {
 	const user = useContext(AuthContext);
@@ -31,17 +32,14 @@ export default function Home(props) {
 	};
 
 	const updateProfile = async (values, userId) => {
-		let { images, displayName } = values;
-		let { data } = images;
-		setLoading(true);
+
 		try {
 			let result = await db.updateUserProfile(values, userId);
-			getUserProfileData();
 			return result;
 		} catch (error) {
 			setError(error);
 		} finally {
-			// getUserProfileData();
+			getUserProfileData();
 		}
 	};
 	useEffect(() => {
@@ -49,7 +47,19 @@ export default function Home(props) {
 	}, []);
 
 	if (loading) {
-		return <ActivityIndicator size='large' color='blue' />;
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					flexDirection: 'row',
+					justifyContent: 'space-around',
+					padding: 10,
+				}}
+			>
+				<ActivityIndicator color='blue' size='large' />
+			</View>
+		);
 	}
 	return (
 		<ScrollView>

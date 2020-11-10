@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState} from 'react';
 import {
 	ActivityIndicator,
 	ScrollView,
@@ -18,7 +18,6 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const ListItemDetails = ({ navigation, route }, props) => {
 	let { item } = route.params;
-	console.log(item, 'item');
 	const [isSaved, setIsSaved] = useState(false);
 	const [savedList, setSavedList] = useState([]);
 	const [error, setError] = useState(null);
